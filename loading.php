@@ -19,54 +19,20 @@
             padding: 20px;
             text-align: center;
         }
-        
-        .loading-bar-container {
-            width: 200px;
-            height: 10px;
-            background-color: #eee;
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 20px auto;
-        }
-        
-        .loading-bar-fill {
-            width: 0;
-            height: 100%;
-            background-color: green;
-            border-radius: 5px;
-            animation: fill-loading-bar 3s linear forwards;
-        }
-        
-        @keyframes fill-loading-bar {
-            0% {
-                width: 0;
-            }
-            50% {
-                width: 50%;
-            }
-            80% {
-                width: 80%;
-            }
-            100% {
-                width: 100%;
-            }
-        }
     </style>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="white-background">
-        <div>
-            <div class="loading-bar-container">
-                <div class="loading-bar-fill"></div>
-            </div>
-        </div>
-        <div id="time">
-            <?php
-            date_default_timezone_set('Asia/Hong_Kong');
-            echo date('F j, Y, g:i a');
-            ?>
-        </div>
+    <div>
+        <img src="loading.gif" alt="Loading" />
+    </div>
+    <div id="time">
+        <?php
+        date_default_timezone_set('Asia/Hong_Kong');
+        echo date('F j, Y, g:i a');
+        ?>
+    </div>
     </div>
 
     <script>
