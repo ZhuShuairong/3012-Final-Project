@@ -86,7 +86,7 @@
 
                 $_SESSION["userid"] = $userid;
                 $_SESSION["login_session"] = true;
-                header("Location: role.php");
+                header("Location: index.php");
             } else {
                 echo "<font color='red'>";
                 echo "Username or password not found!<br/>";

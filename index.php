@@ -75,7 +75,7 @@
             <a href="records.php">Record</a>
             <a href="block.php">Forum</a>
             <a href="choose.php">choose</a>
-            <a href="profile.php">Personal</a>
+            <a href="personal.php">Personal</a>
         </div>
     </div>
 

@@ -7,6 +7,7 @@
 <body>
     <?php
     session_start();
+    unset($_SESSION['selected_product_ids']);
 
     if (isset($_GET['name']) && isset($_GET['date']) && isset($_GET['elapsed'])) {
         $name = urldecode($_GET['name']);

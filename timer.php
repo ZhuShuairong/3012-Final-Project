@@ -1,12 +1,12 @@
 <?php
 // 清除会话
+
 session_start();
-$userid = "";
+$username = "";
 
 $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
     or die("Cannot open MySQL database connection!<br/>");
 
-// 以下代码省略...
 ?>
 
 <!DOCTYPE html>
@@ -14,34 +14,12 @@ $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
 <head>
     <meta charset="UTF-8">
     <title>计时中</title>
-    <style>
-    body {
-        background-color: #fff;
-        background-image: none;
-    }
-
-    .background-text {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-    }
-    </style>
 </head>
 <body>
     <h1>计时中: <span id="focusNameDisplay"></span></h1>
     <div id="timerDisplay">00:00:00</div>
     <button onclick="pauseResumeTimer()">暂停/继续</button>
     <button onclick="stopTimer()">停止计时</button>
-
-    <div class="background-text" id="backgroundText"></div>
 
     <script>
     let startTime = sessionStorage.getItem('startTime') ? parseInt(sessionStorage.getItem('startTime')) : Date.now();
@@ -95,7 +73,7 @@ $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
     // 检查11、1和4是否存在于$_SESSION['selected_product_ids']数组中
     const selectedProductIds = <?php echo json_encode($_SESSION['selected_product_ids']); ?>;
     if (selectedProductIds.includes("11") && selectedProductIds.includes("1") && selectedProductIds.includes("5")) {
-        document.getElementById('backgroundText').textContent = '雪地背景'; // 设置背景文字
+        print("hello");
     }
     </script>
 </body>
