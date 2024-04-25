@@ -3,7 +3,7 @@ session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
-    $quantity = $_POST['quantity'];
+    
 
     // Check if cart session variable exists, if not, create it
     if (!isset($_SESSION['cart'])) {
@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
         // Add the product to the cart
         $cart_item = array(
             'product_id' => $product_id,
-            'quantity' => $quantity
         );
 
         $_SESSION['cart'][] = $cart_item;
@@ -41,7 +40,7 @@ if (isset($_SESSION['cart'])) {
         echo "<div class='cart-item'>";
         echo "<h2>Cart Items</h2>";
         foreach ($cart_items as $item) {
-            echo "<p>Product ID: " . $item['product_id'] . " | Quantity: " . $item['quantity'] . "</p>";
+            echo "<p>Product ID: " . $item['product_id'] ."</p>";
         }
         echo "</div>";
     } else {

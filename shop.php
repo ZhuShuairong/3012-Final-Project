@@ -249,7 +249,6 @@ if (isset($_POST['add_to_cart'])) {
             <?php endif; ?>
         </div>
     </div>
-    <a href="cart.php?action=cart" class="cart-button">View Cart</a>
     <a href="index.php" class="back-button">Back to Main Page</a>
 
     <?php
@@ -258,7 +257,6 @@ if (isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
     $cart_item = array(
         'product_id' => $product_id,
-        'quantity' => 1
     );
 
     // Check if cart session variable exists, if not, create it
@@ -267,44 +265,51 @@ if (isset($_POST['add_to_cart'])) {
     }
 
     // Check if the item is already in the cart, if yes, update the quantity
-    $found = false;
-    foreach ($_SESSION['cart'] as &$item) {
-        if ($item['product_id'] === $product_id) {
-            $found = true;
-            break;
+    $found = true;
+
+    // If the item is not already in the cart, add it
+    if ($found) {
+        $_SESSION['cart'][] = $cart_item;
+    }
+
+    // Create an array to store unique product IDs
+    $unique_product_ids = array();
+
+    // Extract unique product IDs from cart items
+    foreach ($_SESSION['cart'] as $item) {
+        $product_id = $item['product_id'];
+        // Only add unique product IDs to the array
+        if (!in_array($product_id, $unique_product_ids)) {
+            $unique_product_ids[] = $product_id;
         }
     }
 
-    // If the item is not already in the cart, add it
-    if (!$found) {
-        $_SESSION['cart'][] = $cart_item;
-    }
-    exit();
-}
-
-// Handle displaying cart items
-if (isset($_GET['action']) && $_GET['action'] === 'cart') {
-    // Check if cart session variable exists, if not, create it
-    if (!isset($_SESSION['cart'])) {
-        $_SESSION['cart'] = array();
-    }
-
-    $cart_items = $_SESSION['cart'];
-    // Convert cart items to strings
-    $cart_strings = array();
-    foreach ($cart_items as $item) {
-        $product_id = $item['product_id'];
-        $quantity = $item['quantity'];
-        $cart_strings[] = "$product_id,$quantity";
-    }
-
-    // Convert the array of cart strings to a single string
-    $inventory_string = implode(";", $cart_strings);
+    // Convert the array of unique product IDs to a single string
+    $inventory_string = implode(";", $unique_product_ids);
 
     // Store the inventory string in a session variable or database field
     $_SESSION['inventory'] = $inventory_string;
-}
-    ?>
 
+    // Assuming you have established a database connection
+    // and have assigned the connection object to $link
+
+    // Get the username from the session or from wherever it is stored
+    $username = $_SESSION['username'];
+
+    // Prepare the SQL statement to update the inventory in the database
+    $sql = "UPDATE `login-info` SET inventory = '$inventory_string' WHERE username = '$username'";
+
+    // Execute the SQL statement
+    $result = mysqli_query($link, $sql);
+
+    // Check if the update was successful
+    if (!$result) {
+        echo "更新库存时出错：" . mysqli_error($link);
+    }
+
+    exit();
+}
+
+    ?>
 </body>
 </html>

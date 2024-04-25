@@ -74,6 +74,7 @@
             <a href="shop.php">Shop</a>
             <a href="records.php">Record</a>
             <a href="block.php">Forum</a>
+            <a href="choose.php">choose</a>
             <a href="profile.php">Personal</a>
         </div>
     </div>
