@@ -1,27 +1,6 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-function updateBalance() {
-    $.ajax({
-        url: 'get_balance.php', // 替换为获取balance的服务器端脚本的URL
-        type: 'GET',
-        success: function(response) {
-            $('#balance').text(response); // 更新balance的值
-        },
-        error: function() {
-            console.log('Failed to retrieve balance.');
-        }
-    });
-}
-
-$(document).ready(function() {
-    updateBalance();
-});
-
-updateBalance();
-</script>
 <?php
 session_start();
-$userid = "";
+$username = "";
 $password = "";
 $error_message = "";
 $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
@@ -30,38 +9,42 @@ $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
 $res = mysqli_query($link, "SELECT * FROM myshop");
 
 // Obtain form data
-if (isset($_POST["userid"])) {
-    $userid = $_POST["userid"];
-}
-if (isset($_POST["password"])) {
-    $password = $_POST["password"];
+if (isset($_SESSION["username"])) {
+    $username = $_SESSION["username"];
+} else {
+    //检测
+    print "no";
 }
 
-// Check if the user filled in the userid and password
-if ($userid != "" && $password != "") {
+if (isset($_SESSION["password"])) {
+    $password = $_SESSION["password"];
+}
+
+// Check if the user filled in the username and password
+if ($username != "" && $password != "") {
     // Connect to the database
     mysqli_query($link, 'SET NAMES utf8');
-    
+
     // Define SQL string
-    $sql = "SELECT * FROM user WHERE (userid='" . $userid . "') AND password='" . $password . "'";
-    
+    $sql = "SELECT * FROM user WHERE (username='" . $username . "') AND password='" . $password . "'";
+
     // Execute SQL command
     $result = mysqli_query($link, $sql);
     $total_records = mysqli_num_rows($result);
-    
+
     // Check if login data matched with the database
     if ($total_records > 0) {
         // If matched, specify session variable login_session as true
         $_SESSION["login_session"] = true;
+        $_SESSION["username"] = $username; // 设置会话变量username
         header("Location: index.php");
     } else { // Login fails
-        $error_message = "userid (phone number) or password is wrong!";
+        $error_message = "username (phone number) or password is wrong!";
         $_SESSION["login_session"] = false;
     }
-    
+
     mysqli_close($link);
 }
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
@@ -75,7 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
         $price = $row['price'];
 
         // 获取当前用户的coins数量
-        $sql = "SELECT coins FROM `login-info` WHERE userid = '1'";
+        $username = $_SESSION["username"]; // 使用会话变量username
+        $sql = "SELECT coins FROM `login-info` WHERE username = '$username'";
         $result = mysqli_query($link, $sql);
 
         if ($result && mysqli_num_rows($result) > 0) {
@@ -84,15 +68,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
 
             // 检查用户的coins是否足够购买商品
             if ($currentCoins >= $price) {
-                // 更新用户的coins数量
-                $newCoins = $currentCoins - $price;
-                $sql = "UPDATE `login-info` SET coins = '$newCoins' WHERE userid = '1'";
-                $updateResult = mysqli_query($link, $sql);
+                // 检查购物车中是否已经包含该商品
+                $foundInCart = false;
+                if (isset($_SESSION['cart'])) {
+                    foreach ($_SESSION['cart'] as $item) {
+                        if ($item['product_id'] === $product_id) {
+                            $foundInCart = true;
+                            break;
+                        }
+                    }
+                }
 
-                if ($updateResult) {
-                    echo "Purchase successful. Your new balance is: " . $newCoins;
+                if ($foundInCart) {
+                    echo "This item is already in your cart. You cannot purchase it again.";
                 } else {
-                    echo "Failed to update coins.";
+                    // 更新用户的coins数量
+                    $newCoins = $currentCoins - $price;
+                    $sql = "UPDATE `login-info` SET coins = '$newCoins' WHERE username = '$username'";
+                    $updateResult = mysqli_query($link, $sql);
+
+                    if ($updateResult) {
+                        echo "Update successfully.";
+                    } else {
+                        echo "Failed to update coins.";
+                    }
                 }
             } else {
                 echo "Insufficient coins. Unable to make the purchase.";
@@ -104,7 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
         echo "Invalid product ID.";
     }
 }
-
 
 // Search keyword
 if (isset($_POST['keyword'])) {
@@ -121,44 +119,20 @@ while ($row = mysqli_fetch_assoc($res)) {
 // Handle adding items to the cart
 if (isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
-    $cart_item = array(
-        'product_id' => $product_id,
-        'quantity' => 1
-    );
 
     // Check if cart session variable exists, if not, create it
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = array();
+        // Add the selected item to the cart
+        $item = array(
+            'product_id' => $product_id
+        );
+        $_SESSION['cart'][] = $item;
+
+        echo "Item added to cart successfully.";
     }
-
-    // Check if the item is already in the cart, if yes, update the quantity
-    $found = false;
-    if (!$found) {
-        print "You have bought the item!";
-    }
-
-
-    // If the item is not already in the cart, add it
-    if (!$found) {
-        $_SESSION['cart'][] = $cart_item;
-    }
-
-    header("Location: shop.php");
-    exit();
+    echo "You have bought it.";
 }
-
-// Handle displaying cart items
-if (isset($_GET['action']) && $_GET['action'] === 'cart') {
-    // Check if cart session variable exists, if not, create it
-    if (!isset($_SESSION['cart'])) {
-        $_SESSION['cart'] = array();
-    }
-
-    $cart_items = $_SESSION['cart'];
-}
-
-// Close the database connection
-mysqli_close($link);
 ?>
 
 <!DOCTYPE html>
@@ -218,9 +192,36 @@ mysqli_close($link);
 <body>
     <div class="container">
         <div class="search-bar">
-            <p>Balance: <span id="balance"></span></p>
+        <p>Balance: <span id="balance"></span></p>
+
+        <script>
+            // 创建XMLHttpRequest对象
+            var xhr = new XMLHttpRequest();
+
+            // 定义请求的URL
+            var url = "get_balance.php";
+
+            // 发送AJAX请求
+            xhr.open("GET", url, true);
+            xhr.send();
+
+            // 监听AJAX请求的状态变化
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    // 请求已完成
+                    if (xhr.status === 200) {
+                        // 请求成功
+                        var balance = xhr.responseText;
+                        document.getElementById("balance").innerText = balance;
+                    } else {
+                        // 请求失败
+                        console.error("Failed to get balance.");
+                    }
+                }
+            };
+        </script>
             <h1>Welcome to the Shop</h1>
-            <form action="" method="POST">
+            <form action="shop.php" method="POST">
                 <input type="text" name="keyword" placeholder="Search">
                 <button type="submit">Search</button>
             </form>
@@ -269,7 +270,6 @@ if (isset($_POST['add_to_cart'])) {
     $found = false;
     foreach ($_SESSION['cart'] as &$item) {
         if ($item['product_id'] === $product_id) {
-            $item['quantity'] += 1;
             $found = true;
             break;
         }
@@ -279,8 +279,6 @@ if (isset($_POST['add_to_cart'])) {
     if (!$found) {
         $_SESSION['cart'][] = $cart_item;
     }
-
-    header("Location: index.php");
     exit();
 }
 
@@ -292,6 +290,19 @@ if (isset($_GET['action']) && $_GET['action'] === 'cart') {
     }
 
     $cart_items = $_SESSION['cart'];
+    // Convert cart items to strings
+    $cart_strings = array();
+    foreach ($cart_items as $item) {
+        $product_id = $item['product_id'];
+        $quantity = $item['quantity'];
+        $cart_strings[] = "$product_id,$quantity";
+    }
+
+    // Convert the array of cart strings to a single string
+    $inventory_string = implode(";", $cart_strings);
+
+    // Store the inventory string in a session variable or database field
+    $_SESSION['inventory'] = $inventory_string;
 }
     ?>
 

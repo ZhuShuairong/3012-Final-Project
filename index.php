@@ -69,23 +69,23 @@
 <body>
     <h1>欢迎使用专注助手</h1>
     <div class="dropdown">
-        <button class="dropbtn">菜单</button>
+        <button class="dropbtn">Menu</button>
         <div class="dropdown-content">
-            <a href="shop.php">进入商店</a>
-            <a href="records.php">查看专注记录</a>
-            <a href="block.php">连接社区</a>
-            <a href="profile.php">个人信息</a>
+            <a href="shop.php">Shop</a>
+            <a href="records.php">Record</a>
+            <a href="block.php">Forum</a>
+            <a href="profile.php">Personal</a>
         </div>
     </div>
 
     <div class="container">
         <form id="focusForm" class="form-style">
             <div class="form-group">
-                <label for="focusName">专注内容:</label>
+                <label for="focusName">Content:</label>
                 <input type="text" id="focusName" name="focusName" required>
             </div>
             <div class="form-group">
-                <label for="timerType">计时类型:</label>
+                <label for="timerType">Timing type:</label>
                 <select id="timerType" name="timerType">
                     <option value="up">正计时</option>
                     <option value="down">倒计时</option>

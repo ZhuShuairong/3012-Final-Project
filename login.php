@@ -77,6 +77,7 @@
             $total_records = mysqli_num_rows($result);
 
             if ($total_records > 0) {
+                $_SESSION["username"] = $username;
                 $_SESSION["login_session"] = true;
                 header("Location: role.php");
             } else {
