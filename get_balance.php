@@ -5,8 +5,8 @@ $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
 
 // 获取当前用户的coins数量
 session_start();
-$username = $_SESSION["username"]; // 使用会话变量username
-$sql = "SELECT coins FROM `login-info` WHERE username = '$username'";
+$userid = $_SESSION["userid"]; // 使用会话变量userid
+$sql = "SELECT coins FROM `login-info` WHERE userid = '$userid'";
 $result = mysqli_query($link, $sql);
 
 if ($result && mysqli_num_rows($result) > 0) {

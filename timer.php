@@ -1,7 +1,7 @@
 <?php
 // 清除会话
 session_start();
-$username = "";
+$userid = "";
 
 $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
     or die("Cannot open MySQL database connection!<br/>");

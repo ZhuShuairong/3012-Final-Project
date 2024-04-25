@@ -1,6 +1,6 @@
 <?php
 session_start();
-$username = "";
+$userid = "";
 $password = "";
 $error_message = "";
 $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
@@ -9,8 +9,8 @@ $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
 $res = mysqli_query($link, "SELECT * FROM myshop");
 
 // Obtain form data
-if (isset($_SESSION["username"])) {
-    $username = $_SESSION["username"];
+if (isset($_SESSION["userid"])) {
+    $userid = $_SESSION["userid"];
 } else {
     //检测
     print "no";
@@ -20,13 +20,13 @@ if (isset($_SESSION["password"])) {
     $password = $_SESSION["password"];
 }
 
-// Check if the user filled in the username and password
-if ($username != "" && $password != "") {
+// Check if the user filled in the userid and password
+if ($userid != "" && $password != "") {
     // Connect to the database
     mysqli_query($link, 'SET NAMES utf8');
 
     // Define SQL string
-    $sql = "SELECT * FROM user WHERE (username='" . $username . "') AND password='" . $password . "'";
+    $sql = "SELECT * FROM user WHERE (userid='" . $userid . "') AND password='" . $password . "'";
 
     // Execute SQL command
     $result = mysqli_query($link, $sql);
@@ -36,10 +36,10 @@ if ($username != "" && $password != "") {
     if ($total_records > 0) {
         // If matched, specify session variable login_session as true
         $_SESSION["login_session"] = true;
-        $_SESSION["username"] = $username; // 设置会话变量username
+        $_SESSION["userid"] = $userid; // 设置会话变量userid
         header("Location: index.php");
     } else { // Login fails
-        $error_message = "username (phone number) or password is wrong!";
+        $error_message = "userid (phone number) or password is wrong!";
         $_SESSION["login_session"] = false;
     }
 
@@ -58,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
         $price = $row['price'];
 
         // 获取当前用户的coins数量
-        $username = $_SESSION["username"]; // 使用会话变量username
-        $sql = "SELECT coins FROM `login-info` WHERE username = '$username'";
+        $userid = $_SESSION["userid"]; // 使用会话变量userid
+        $sql = "SELECT coins FROM `login-info` WHERE userid = '$userid'";
         $result = mysqli_query($link, $sql);
 
         if ($result && mysqli_num_rows($result) > 0) {
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
                 } else {
                     // 更新用户的coins数量
                     $newCoins = $currentCoins - $price;
-                    $sql = "UPDATE `login-info` SET coins = '$newCoins' WHERE username = '$username'";
+                    $sql = "UPDATE `login-info` SET coins = '$newCoins' WHERE userid = '$userid'";
                     $updateResult = mysqli_query($link, $sql);
 
                     if ($updateResult) {
@@ -293,11 +293,11 @@ if (isset($_POST['add_to_cart'])) {
     // Assuming you have established a database connection
     // and have assigned the connection object to $link
 
-    // Get the username from the session or from wherever it is stored
-    $username = $_SESSION['username'];
+    // Get the userid from the session or from wherever it is stored
+    $userid = $_SESSION['userid'];
 
     // Prepare the SQL statement to update the inventory in the database
-    $sql = "UPDATE `login-info` SET inventory = '$inventory_string' WHERE username = '$username'";
+    $sql = "UPDATE `login-info` SET inventory = '$inventory_string' WHERE userid = '$userid'";
 
     // Execute the SQL statement
     $result = mysqli_query($link, $sql);

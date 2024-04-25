@@ -77,7 +77,14 @@
             $total_records = mysqli_num_rows($result);
 
             if ($total_records > 0) {
-                $_SESSION["username"] = $username;
+
+                $sql = "SELECT userid FROM `login-info` WHERE password='";
+                $sql .= $password . "' AND username='" . $username . "'";
+
+                $result = mysqli_query($link, $sql);
+                $userid = mysqli_fetch_row($result)[0];
+
+                $_SESSION["userid"] = $userid;
                 $_SESSION["login_session"] = true;
                 header("Location: role.php");
             } else {

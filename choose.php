@@ -1,15 +1,15 @@
 <?php
 session_start();
-$username = "";
+$userid = "";
 
 $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
     or die("Cannot open MySQL database connection!<br/>");
 
-// Get the username from the session or from wherever it is stored
-$username = $_SESSION['username'];
+// Get the userid from the session or from wherever it is stored
+$userid = $_SESSION['userid'];
 
 // Prepare the SQL statement to retrieve the inventory from the database
-$sql = "SELECT inventory FROM `login-info` WHERE username = '$username'";
+$sql = "SELECT inventory FROM `login-info` WHERE userid = '$userid'";
 
 // Execute the SQL statement
 $result = mysqli_query($link, $sql);
