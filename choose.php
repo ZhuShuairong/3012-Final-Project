@@ -25,8 +25,6 @@ if ($result) {
     // Convert the inventory string to an array of product IDs
     $obtained_product_ids = explode(";", $inventory_string);
 
-    // Assuming you have established a database connection
-    // and have assigned the connection object to $link
 
     // Prepare the SQL statement to retrieve the MIME and name for obtained products
     $sql = "SELECT mime, name, product_id FROM `myshop` WHERE product_id IN ('" . implode("','", $obtained_product_ids) . "')";
