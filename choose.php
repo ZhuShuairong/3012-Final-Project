@@ -25,7 +25,6 @@ if ($result) {
     // Convert the inventory string to an array of product IDs
     $obtained_product_ids = explode(";", $inventory_string);
 
-
     // Prepare the SQL statement to retrieve the MIME and name for obtained products
     $sql = "SELECT mime, name, product_id FROM `myshop` WHERE product_id IN ('" . implode("','", $obtained_product_ids) . "')";
 
@@ -34,7 +33,8 @@ if ($result) {
 
     // Check if the query was successful
     if ($result) {
-        $selected_count = 0; // Counter for selected checkboxes
+        $selected_product_ids = array(); // Array to store selected product IDs
+
         // Loop through the results
         while ($row = mysqli_fetch_assoc($result)) {
             $mime = $row['mime'];
@@ -44,21 +44,18 @@ if ($result) {
             // Output the image tag
             echo '<img src="' . $mime . '" alt="' . $name . '" style="width: 100%; height: auto;">';
 
-            // Check if the maximum number of checkboxes has been reached
-            if ($selected_count < 3) {
-                // Output the checkbox
-                echo '<input type="checkbox" name="selected_images[]" value="' . $product_id . '">';
-                $selected_count++;
-            }
+            // Output the checkbox
+            echo '<input type="checkbox" name="selected_images[]" value="' . $product_id . '">';
+
+            // Add the selected product ID to the array
+            $selected_product_ids[] = $product_id;
         }
-        
-        // Display a message if the maximum number of checkboxes has been reached
-        if ($selected_count >= 3) {
-            echo '<p>最多只能选择三个照片。</p>';
-        }
-        
+
         // Add a submit button to submit the selected checkboxes
         echo '<input type="submit" name="submit" value="提交">';
+
+        // Store the selected product IDs in the $_SESSION
+        $_SESSION['selected_product_ids'] = $selected_product_ids;
     } else {
         echo "查询数据库时出错：" . mysqli_error($link);
     }
@@ -69,4 +66,4 @@ if ($result) {
 // Close the database connection
 mysqli_close($link);
 ?>
-<a href="index.php" class="back-button">Back to Main Page</a>
+<a href="index.php" class="back-button">返回主页</a>
