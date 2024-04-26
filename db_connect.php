@@ -2,7 +2,7 @@
 // 数据库服务器信息
 $servername = "localhost";
 $username = "root";
-$password = "";  // 实际部署时请确保使用安全的密码
+$password = "A12345678";  // 实际部署时请确保使用安全的密码
 $dbname = "mydata";         // 你的数据库名称
 
 // 创建连接
