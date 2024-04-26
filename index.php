@@ -2,16 +2,87 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>专注助手主页</title>
+    <title>Focus Helper</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* 下拉菜单的基本样式 */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f8f8; 
+        }
+        body {
+            background-image: url("index_background.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .table-title {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 36px;
+            font-weight: bold;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: #4a90e2;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; 
+            padding: 20px;
+        }
+        .form-style {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7); /* 半透明白色背景 */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .form-style td {
+            padding: 12px;
+            border: 1px solid #ccc;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 1.1em;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: calc(100% - 24px);
+            padding: 12px;
+            border: none;
+            background-color: transparent; /* 使输入框透明 */
+        }
+        .form-group button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }
         .dropdown {
             position: fixed;
             top: 20px;
             right: 20px;
         }
-
         .dropdown-content {
             display: none;
             position: absolute;
@@ -21,7 +92,6 @@
             z-index: 1;
             right: 0;
         }
-
         .dropdown-content a {
             color: black;
             padding: 12px 16px;
@@ -29,24 +99,47 @@
             display: block;
             text-align: left;
         }
-
-        .dropdown-content a:hover {background-color: #f1f1f1}
-        .dropdown:hover .dropdown-content {display: block;}
-        .dropdown:hover .dropbtn {background-color: #3e8e41;}
-
-        /* 容器和表单样式 */
-        body, html {height: 100%; margin: 0; font-family: Arial, sans-serif;}
-        .container {display: flex; justify-content: center; align-items: center; height: 100%;}
-        .form-style {padding: 20px; background: #f4f4f4; border: 1px solid #ccc; border-radius: 5px;}
-        .form-group {margin-bottom: 15px;}
-        .form-group label {display: block; margin-bottom: 5px;}
-        .form-group input[type="text"], .form-group input[type="number"], .form-group select {width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;}
-        .form-group button {padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;}
-        .form-group button:hover {background-color: #45a049;}
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+        .title {
+            text-align: center;
+            font-size: 2em;
+            margin-top: 0; /* Adjust this if there's too much space */
+        }
+        .reward-info {
+            font-size: 1.2em;
+            color: #555;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center; /* 居中说明文字 */
+        }
+        #startTimingButton {
+            background-color: #1aad19;
+            color: #ffffff;
+            border: none; /* 去掉边框 */
+            border-radius: 5px; /* 设置圆角为 20px，可以根据需要调整 */
+            padding: 10px 20px; /* 调整按钮的内边距来增加大小 */
+            font-size: 1.0em; /* 调整按钮的字体大小来增加大小 */
+        }
+        
+        #startTimingButton:hover {
+            background-color: #108f15;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            sessionStorage.setItem('toPause','3')
             $('#timerType').change(function() {
                 if ($(this).val() === 'down') {
                     $('#durationContainer').show();
@@ -59,15 +152,13 @@
                 e.preventDefault();
                 const focusName = $('#focusName').val();
                 const timerType = $('#timerType').val();
-                const duration = $('#duration').val() || 0; // 提供默认值为0
+                const duration = $('#duration').val() || 0;
                 window.location.href = `timer.php?name=${encodeURIComponent(focusName)}&type=${timerType}&duration=${duration}`;
             });
-
         });
     </script>
 </head>
 <body>
-    <h1>欢迎使用专注助手</h1>
     <div class="dropdown">
         <button class="dropbtn">Menu</button>
         <div class="dropdown-content">
@@ -78,29 +169,58 @@
             <a href="personal.php">Personal</a>
         </div>
     </div>
-
     <div class="container">
-        <form id="focusForm" class="form-style">
-            <div class="form-group">
-                <label for="focusName">Content:</label>
-                <input type="text" id="focusName" name="focusName" required>
-            </div>
-            <div class="form-group">
-                <label for="timerType">Timing type:</label>
-                <select id="timerType" name="timerType">
-                    <option value="up">正计时</option>
-                    <option value="down">倒计时</option>
-                </select>
-            </div>
-            <div class="form-group" id="durationContainer" style="display:none;">
-                <label for="duration">设置时长（分钟）:</label>
-                <input type="number" id="duration" name="duration">
-            </div>
-            <div class="form-group">
-                <button type="submit">开始计时</button>
-            </div>
+        <form id="focusForm" class="form-style" action="timer.php" method="GET">
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <h1 class="table-title">Traveler</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="focusName">Focus Content:</label>
+                    </td>
+                    <td>
+                        <input type="text" id="focusName" name="focusName" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="timerType">Timing Type:</label>
+                    </td>
+                    <td>
+                        <select id="timerType" name="timerType">
+                            <option value="up">Up Timer</option>
+                            <option value="down">Down Timer</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="durationContainer" style="display:none;">
+                    <td>
+                        <label for="duration">Set Duration (minutes):</label>
+                    </td>
+                    <td>
+                        <input type="number" id="duration" name="duration">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit" id="startTimingButton">Start Timing</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="reward-info">
+                        <p>Earn 20 virtual coins for every full hour timed, whether it's an up timer or a down timer.
+                            <br>Note: No coins are awarded if a down timer is stopped before completing an hour.
+                            &#x1F4B0; <!-- 添加钱币的 Emoji -->
+                        </p>
+                    </td>
+                </tr>
+            </table>
         </form>
     </div>
 </body>
 </html>
+
 

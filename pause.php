@@ -51,11 +51,6 @@
         button:hover {
             background-color: #45a049;
         }
-
-        a {
-            color: inherit; /* Remove if you use <button> */
-            text-decoration: none;
-        }
     </style>
 </head>
 <body>
@@ -66,8 +61,16 @@
     </div>
 
     <script>
+        sessionStorage.setItem('toPause', "2");
         function continueFocus() {
-            window.location.href = 'timer.php'; // Redirect back to the timer page
+
+            // Ensure all necessary timer state is restored correctly
+            sessionStorage.setItem('isPaused', 'false');  // Ensure that the timer knows it is no longer paused
+            const params = sessionStorage.getItem('query');
+            let query = JSON.parse(params)
+            if (query){
+                window.location.href = 'timer.php?name='+query.name+"&type="+query.type+"&duration="+query.duration; // Redirect back to the timer page
+            }
         }
     </script>
 </body>
