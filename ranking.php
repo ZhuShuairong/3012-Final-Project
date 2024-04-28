@@ -1,33 +1,27 @@
 <?php
 // Set up database connection variables
 $host = 'localhost'; // or your host
-$dbname = 'root';
-$username = 'A12345678';
-$password = 'mydata';
+$dbname = 'your_database_name';
+$username = 'your_username';
+$password = 'your_password';
 
+// Create a mysqli connection
+$conn = new mysqli($host, $username, $password, $dbname);
 
-
-// Create a PDO instance to connect to the database
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    // Set the PDO error mode to exception
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Could not connect to the database $dbname :" . $e->getMessage());
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
 // SQL query to select the username and coin columns and order by coin in descending order
 $sql = "SELECT username, coin FROM tablename ORDER BY coin DESC";
 
-// Prepare and execute SQL statement
-try {
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+// Execute the query
+$result = $conn->query($sql);
 
-    // Fetch the results
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Query failed: " . $e->getMessage());
+// Check for errors in the query
+if (!$result) {
+    die("Query failed: " . $conn->error);
 }
 
 // HTML to display the coins and usernames
@@ -53,13 +47,17 @@ try {
             <th>Coin</th>
         </tr>
         <?php $rank = 1; ?>
-        <?php foreach ($results as $row): ?>
+        <?php while ($row = $result->fetch_assoc()): ?>
         <tr>
             <td><?= $rank++ ?></td>
             <td><?= htmlspecialchars($row['username']) ?></td>
             <td><?= htmlspecialchars($row['coin']) ?></td>
         </tr>
-        <?php endforeach; ?>
+        <?php endwhile; ?>
     </table>
 </body>
 </html>
+<?php
+// Close connection
+$conn->close();
+?>
