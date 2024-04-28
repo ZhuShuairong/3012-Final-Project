@@ -88,8 +88,75 @@
                                 mysqli_query($link, 'SET NAMES utf8');
                             
                                 if (mysqli_query($link, $sql)) { //Execute SQL instructions
-                                    echo "Success!<br/>";
-                                    sleep(2);
+                                    require_once "Mail.php";
+                                    $from = "tonysam@um.edu.mo";
+                                    $to = $email;
+                                    $subject = "🎉 Registration Success! 🎉";
+
+                                    // HTML email body
+                                    $body = <<<HTML
+                                    <!DOCTYPE html>
+                                    <html lang="en">
+                                    <head>
+                                        <meta charset="UTF-8">
+                                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                        <title>Registration Success</title>
+                                    </head>
+                                    <body style="font-family: Arial, sans-serif; background-color: #f5f5f5; text-align: center; padding: 20px;">
+
+                                        <h1 style="color: #007bff;">Thank you for registering!</h1>
+                                        <p style="font-size: 16px;">We're excited to have you on board.</p>
+
+                                        <p style="font-size: 16px;">Click the button below to log in:</p>
+                                        <a href="http://localhost:3000/3012-Final-Project-main/login.php" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">Log In</a>
+
+                                        <p style="font-size: 14px; color: #888;">If you didn't register, please ignore this email.</p>
+
+                                        <p style="font-size: 14px; color: #888;">Best regards,<br>Your Website Team</p>
+                                    </body>
+                                    </html>
+                                    HTML;
+
+                                    // SMTP configuration
+                                    $host = "smtp.um.edu.mo";
+                                    $port = "587";
+                                    $username = "smtpshare";
+                                    $password = "T&es34Y+";
+
+                                    // Additional headers
+                                    $extraHeaders = array(
+                                        'From' => $from,
+                                        'To' => $to,
+                                        'Subject' => $subject,
+                                        'Content-Type' => 'text/html; charset=UTF-8', // Set the Content-Type header
+                                    );
+
+                                    // Create the SMTP instance
+                                    $smtp = Mail::factory('smtp', array(
+                                        'host' => $host,
+                                        'port' => $port,
+                                        'auth' => true,
+                                        'socket_options' => array(
+                                            'ssl' => array(
+                                                'verify_peer' => false,
+                                                'verify_peer_name' => false,
+                                                'allow_self_signed' => true,
+                                            ),
+                                        ),
+                                        'username' => $username,
+                                        'password' => $password,
+                                    ));
+
+                                    // Send the email
+                                    $mail = $smtp->send($to, $extraHeaders, $body);
+
+                                    if (PEAR::isError($mail)) {
+                                        echo("<p>" . $mail->getMessage() . "</p>");
+                                    } else {
+                                        echo("<p>Message successfully sent!</p>");
+                                    }
+
+                                    // Redirect to login.php
                                     header("Location: login.php");
                                 }
                                 mysqli_close($link);
