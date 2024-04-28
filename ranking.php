@@ -51,7 +51,7 @@ if (!$result) {
         <tr>
             <td><?= $rank++ ?></td>
             <td><?= htmlspecialchars($row['username']) ?></td>
-            <td><?= htmlspecialchars($row['coin']) ?></td>
+            <td><?= htmlspecialchars($row['coins']) ?></td>
         </tr>
         <?php endwhile; ?>
     </table>
