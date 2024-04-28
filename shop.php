@@ -20,7 +20,7 @@ if (isset($_SESSION["password"])) {
     $password = $_SESSION["password"];
 }
 
-// Check if the user filled in the userid and password
+// Check if the user filled in the userid and password+
 if ($userid != "" && $password != "") {
     // Connect to the database
     mysqli_query($link, 'SET NAMES utf8');
@@ -232,7 +232,7 @@ if (isset($_POST['add_to_cart'])) {
                     
                     <div class="item-card">
                         <a href="product.php?product_id=<?php echo $row['product_id']; ?>">
-                            <img src="<?php echo $row['mime']; ?>" alt="<?php echo $row['name']; ?>" style="width: 100%; height: auto;">
+                            <img src="<?php echo "3012 final picture/" . $row['mime']; ?>" alt="<?php echo $row['name']; ?>" style="width: 100%; height: auto;">
                         </a>
                         <h4><?php echo $row['name']; ?></h4>
                         <p>Price: $<?php echo $row['price']; ?></p>
