@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
                 }
 
                 if ($foundInCart) {
-                    echo "This item is already in your cart. You cannot purchase it again.";
+                    echo "";
                 } else {
                     // 更新用户的coins数量
                     $newCoins = $currentCoins - $price;
@@ -131,95 +131,211 @@ if (isset($_POST['add_to_cart'])) {
 
         echo "Item added to cart successfully.";
     }
-    echo "You have bought it.";
+    echo "";
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Design Store</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e8d7d7;
+        }
+
         .container {
-            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         .search-bar {
-            flex: 1;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            background-color: rgba(255, 255, 255, 0.8);;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar h1 {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .search-bar input[type="text"] {
             padding: 10px;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 300px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            font-size: 20px;
+            background-color: #D3BBB8;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
         }
 
         .item-list {
-            flex: 3;
-            padding: 10px;
             display: flex;
             flex-wrap: wrap;
+            justify-content: flex-start;
+            align-content: flex-start;
+            margin-top: 20px;
         }
 
         .item-card {
-            width: 200px;
+            width: 20%;
             margin: 10px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .item-card img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        .item-card h4 {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .item-card p {
+            margin-top: 5px;
+            font-size: 16px;
+        }
+
+        .item-card button {
+            padding: 12px 24px;
+            font-size: 18px;
+            background-color: #D3BBB8;
+            color: #000000;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .back-button,
+        .cart-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ccc;
+            color: #000;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
         }
 
         .back-button {
             position: fixed;
-            bottom: 10px;
-            left: 10px;
-            padding: 10px;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
             background-color: #ccc;
             color: #000;
             text-decoration: none;
-        }
-
-        .cart-button {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            padding: 10px;
-            background-color: #ccc;
-            color: #000;
-            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
         }
 
         .cart-item {
             margin: 10px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            border-radius: 4px;
+        }
+
+        #balance {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* 响应式样式 */
+        @media (max-width: 768px) {
+            .item-card {
+                width: 30%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .item-card {
+                width: 100%;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="search-bar">
-        <p>Balance: <span id="balance"></span></p>
+        <div id="balance">&#x1F4B0<span id="balance-value"></span></div>
 
-        <script>
-            // 创建XMLHttpRequest对象
-            var xhr = new XMLHttpRequest();
-
-            // 定义请求的URL
-            var url = "get_balance.php";
-
-            // 发送AJAX请求
-            xhr.open("GET", url, true);
-            xhr.send();
-
-            // 监听AJAX请求的状态变化
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    // 请求已完成
-                    if (xhr.status === 200) {
-                        // 请求成功
-                        var balance = xhr.responseText;
-                        document.getElementById("balance").innerText = balance;
-                    } else {
-                        // 请求失败
-                        console.error("Failed to get balance.");
-                    }
+            <script>
+                function showPurchaseAlert() {
+                    alert("Item added to cart.");
                 }
-            };
-        </script>
+                
+                // Creating XMLHttpRequest object
+                var xhr = new XMLHttpRequest();
+
+                // Defining the request URL
+                var url = "get_balance.php";
+
+                // Sending the AJAX request
+                xhr.open("GET", url, true);
+                xhr.send();
+
+                // Listening to the AJAX request state change
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        // Request completed
+                        if (xhr.status === 200) {
+                            // Request successful
+                            var balance = xhr.responseText;
+                            document.getElementById("balance-value").innerText = balance;
+                        } else {
+                            // Request failed
+                            console.error("Failed to get balance.");
+                        }
+                    }
+                };
+            </script>
             <h1>Welcome to the Shop</h1>
             <form action="shop.php" method="POST">
                 <input type="text" name="keyword" placeholder="Search">
@@ -227,24 +343,24 @@ if (isset($_POST['add_to_cart'])) {
             </form>
         </div>
         <div class="item-list">
-            <?php if (count($myshop) > 0): ?>
-                <?php foreach ($myshop as $row): ?>
-                    
+            <?php if (count($myshop) > 0) : ?>
+                <?php $itemCount = 0; ?>
+                <?php foreach ($myshop as $row) : ?>
+                    <?php if ($itemCount % 5 === 0) : ?>
+                        <div style="clear:both;"></div>
+                    <?php endif; ?>
                     <div class="item-card">
-                        <a href="product.php?product_id=<?php echo $row['product_id']; ?>">
-                            <img src="<?php echo "3012 final picture/" . $row['mime']; ?>" alt="<?php echo $row['name']; ?>" style="width: 100%; height: auto;">
-                        </a>
+                        <img src="<?php echo "3012 final picture/" . $row['mime']; ?>" alt="<?php echo $row['name']; ?>">
                         <h4><?php echo $row['name']; ?></h4>
                         <p>Price: $<?php echo $row['price']; ?></p>
-                        
                         <form action="" method="POST">
                             <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
-                            <button type="submit" name="add_to_cart">Buy</button>
+                            <button type="submit" name="add_to_cart" onclick="showPurchaseAlert()">Purchase</button>
                         </form>
-
                     </div>
+                    <?php $itemCount++; ?>
                 <?php endforeach; ?>
-            <?php else: ?>
+            <?php else : ?>
                 <p>No items available.</p>
             <?php endif; ?>
         </div>
@@ -252,64 +368,73 @@ if (isset($_POST['add_to_cart'])) {
     <a href="index.php" class="back-button">Back to Main Page</a>
 
     <?php
-// Handle adding items to the cart
-if (isset($_POST['add_to_cart'])) {
-    $product_id = $_POST['product_id'];
-    $cart_item = array(
-        'product_id' => $product_id,
-    );
+    // Handle adding items to the cart
+    if (isset($_POST['add_to_cart'])) {
+        $product_id = $_POST['product_id'];
+        $cart_item = array(
+            'product_id' => $product_id,
+        );
 
-    // Check if cart session variable exists, if not, create it
-    if (!isset($_SESSION['cart'])) {
-        $_SESSION['cart'] = array();
-    }
-
-    // Check if the item is already in the cart, if yes, update the quantity
-    $found = true;
-
-    // If the item is not already in the cart, add it
-    if ($found) {
-        $_SESSION['cart'][] = $cart_item;
-    }
-
-    // Create an array to store unique product IDs
-    $unique_product_ids = array();
-
-    // Extract unique product IDs from cart items
-    foreach ($_SESSION['cart'] as $item) {
-        $product_id = $item['product_id'];
-        // Only add unique product IDs to the array
-        if (!in_array($product_id, $unique_product_ids)) {
-            $unique_product_ids[] = $product_id;
+        // Check if cart session variable exists, if not, create it
+        if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = array();
         }
+
+        // Check if the item is already in the cart, if yes, updatethe quantity. Otherwise, add it to the cart.
+
+        $found = false;
+
+        // Check if the item is already in the cart
+        foreach ($_SESSION['cart'] as $item) {
+            if ($item['product_id'] === $product_id) {
+                $found = true;
+                // Update the quantity or perform any other necessary action
+                break;
+            }
+        }
+
+        // If the item is not already in the cart, add it
+        if (!$found) {
+            $_SESSION['cart'][] = $cart_item;
+        }
+
+        // Create an array to store unique product IDs
+        $unique_product_ids = array();
+
+        // Extract unique product IDs from cart items
+        foreach ($_SESSION['cart'] as $item) {
+            $product_id = $item['product_id'];
+            // Only add unique product IDs to the array
+            if (!in_array($product_id, $unique_product_ids)) {
+                $unique_product_ids[] = $product_id;
+            }
+        }
+
+        // Convert the array of unique product IDs to a single string
+        $inventory_string = implode(";", $unique_product_ids);
+
+        // Store the inventory string in a session variable or database field
+        $_SESSION['inventory'] = $inventory_string;
+
+        // Assuming you have established a database connection
+        // and have assigned the connection object to $link
+
+        // Get the userid from the session or from wherever it is stored
+        $userid = $_SESSION['userid'];
+
+        // Prepare the SQL statement to update the inventory in the database
+        $sql = "UPDATE `login-info` SET inventory = '$inventory_string' WHERE userid = '$userid'";
+
+        // Execute the SQL statement
+        $result = mysqli_query($link, $sql);
+
+        // Check if the update was successful
+        if (!$result) {
+            echo "Failed to update inventory: " . mysqli_error($link);
+        }
+
+        exit();
     }
-
-    // Convert the array of unique product IDs to a single string
-    $inventory_string = implode(";", $unique_product_ids);
-
-    // Store the inventory string in a session variable or database field
-    $_SESSION['inventory'] = $inventory_string;
-
-    // Assuming you have established a database connection
-    // and have assigned the connection object to $link
-
-    // Get the userid from the session or from wherever it is stored
-    $userid = $_SESSION['userid'];
-
-    // Prepare the SQL statement to update the inventory in the database
-    $sql = "UPDATE `login-info` SET inventory = '$inventory_string' WHERE userid = '$userid'";
-
-    // Execute the SQL statement
-    $result = mysqli_query($link, $sql);
-
-    // Check if the update was successful
-    if (!$result) {
-        echo "更新库存时出错：" . mysqli_error($link);
-    }
-
-    exit();
-}
-
     ?>
 </body>
 </html>
