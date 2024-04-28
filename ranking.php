@@ -1,9 +1,9 @@
 <?php
 // Set up database connection variables
 $host = 'localhost'; // or your host
-$dbname = 'your_database_name';
-$username = 'your_username';
-$password = 'your_password';
+$dbname = 'mydata';
+$username = 'root';
+$password = '';
 
 // Create a mysqli connection
 $conn = new mysqli($host, $username, $password, $dbname);
@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // SQL query to select the username and coin columns and order by coin in descending order
-$sql = "SELECT username, coin FROM tablename ORDER BY coin DESC";
+$sql = "SELECT username, coins FROM logi ORDER BY coins DESC";
 
 // Execute the query
 $result = $conn->query($sql);
