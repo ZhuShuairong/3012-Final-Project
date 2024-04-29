@@ -30,7 +30,7 @@ if ($row) {
     }
 
     // 输出最新的硬币数
-    echo json_encode(['coins' => $currentCoins]);
+    echo json_encode([$currentCoins]);
 } else {
     echo json_encode(['error' => 'User not found']);
 }

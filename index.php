@@ -44,9 +44,8 @@
         }
         
         .form-style td {
-            padding: 24px;
+            padding: 12px;
             border: 1px solid #ccc;
-            text-align: center;
         }
 
         .form-group {
@@ -54,28 +53,27 @@
         }
         .form-group label {
             display: block;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             color: #333;
-            font-size: 30em;
+            font-size: 1.1em;
         }
         .form-group input[type="text"],
         .form-group input[type="number"],
         .form-group select {
-            width: calc(100% - 48px);
-            padding: 16px;
+            width: calc(100% - 24px);
+            padding: 12px;
             border: none;
             background-color: transparent; /* 使输入框透明 */
-            font-size: 1.2em; /* 增加输入框字体大小 */
         }
         .form-group button {
             width: 100%;
-            padding: 16px;
+            padding: 12px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 1.2em;
+            font-size: 1.1em;
         }
         .form-group button:hover {
             background-color: #45a049;
@@ -85,20 +83,6 @@
             top: 20px;
             right: 20px;
         }
-
-        .dropdown .dropbtn {
-            font-size: 1.2em; /* 调整按钮的字体大小来增加大小 */
-            padding: 16px 20px; /* 调整按钮的内边距来增加大小 */
-            background-color: #505d6f; /* 修改背景颜色为蓝色 */
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .dropdown .dropbtn:hover {
-            background-color: #76a3ad; /* 修改鼠标悬停时的背景颜色 */
-        }
-
         .dropdown-content {
             display: none;
             position: absolute;
@@ -113,22 +97,16 @@
             padding: 12px 16px;
             text-decoration: none;
             display: block;
-            text-align: center;
+            text-align: left;
         }
         .dropdown-content a:hover {
-            background-color: #505d6f;
-            color: #333;
-        }
-
-        .dropdown:hover .dropbtn {
-            background-color: #3e8e41;
+            background-color: #f1f1f1;
         }
         .dropdown:hover .dropdown-content {
             display: block;
-            background-color: #f1f1f1;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 5px;
+        }
+        .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
         }
         .title {
             text-align: center;
@@ -138,15 +116,15 @@
         .reward-info {
             font-size: 1.2em;
             color: #555;
-            padding: 20px;
-            margin-top: 20px;
+            padding: 10px;
+            margin-top: 10px;
             background-color: #f4f4f4;
             border: 1px solid #ddd;
             border-radius: 5px;
             text-align: center; /* 居中说明文字 */
         }
         #startTimingButton {
-            background-color: #505d6f;
+            background-color: #1aad19;
             color: #ffffff;
             border: none; /* 去掉边框 */
             border-radius: 5px; /* 设置圆角为 20px，可以根据需要调整 */
@@ -155,7 +133,7 @@
         }
         
         #startTimingButton:hover {
-            background-color: #76a3ad;
+            background-color: #108f15;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -233,7 +211,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="reward-info">
-                        <p>Earn 20 virtual coins for every full hour timed, whether it's an up timer or a down timer.<br>
+                        <p>Earn 20 virtual coins for every full hour timed, whether it's an up timer or a down timer.
                             <br>Note: No coins are awarded if a down timer is stopped before completing an hour.
                             &#x1F4B0; <!-- 添加钱币的 Emoji -->
                         </p>

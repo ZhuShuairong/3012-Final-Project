@@ -68,7 +68,7 @@ $link->close();
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>计时中</title>
+    <title></title>
     <style>
         body {
             background-color: #f8f8f8;
@@ -89,6 +89,32 @@ $link->close();
             position: absolute; /* Make the timer display float above the progress bar */
             z-index: 1; /* Ensure it is above the SVG */
         }
+
+        .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .custom-button {
+        background-color: #1AAD19;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    #coinsDisplay {
+    font-size: 2em;
+  }
+
+    .custom-button:hover {
+        background-color: #129F12;
+    }
 
         .progress-bar {
             width: 200px;
@@ -127,10 +153,12 @@ $link->close();
     </svg>
     <div id="timeLeftDisplay" style="position: absolute; font-size: 32px; color: #333;">00:00:00</div>
 </div>
-<h1>计时中: <span id="focusNameDisplay"></span></h1>
-<button onclick="pauseResumeTimer()">暂停/继续</button>
-<button onclick="stopTimer()">停止计时</button>
-<p id="coinsDisplay">Coins earned this session: <?php echo htmlspecialchars($coins); ?></p>
+<h1>Focus: <span id="focusNameDisplay"></span></h1>
+<div class="button-container">
+    <button class="custom-button" onclick="pauseResumeTimer()">Pause/Continue</button>
+    <button class="custom-button" onclick="stopTimer()">Stop</button>
+</div>
+<p id="coinsDisplay">&#x1F4B0;: <span class="coin-emoji"></span><span class="coins-amount"></span></p>
 
 <script>
     let startTime;
@@ -214,16 +242,16 @@ $link->close();
     }
 
     // Update the timer every second
-    function updateTimer() {
-        const now = Date.now();
-        elapsed = now - startTime;
-        updateDisplay(elapsed);
+function updateTimer() {
+  const now = Date.now();
+  elapsed = now - startTime;
+  updateDisplay(elapsed);
 
-        if (timerType === 'down' && elapsed >= duration) {
-            clearInterval(timerInterval);
-            alert('倒计时结束');
-        }
-    }
+  if (timerType === 'down' && elapsed >= duration) {
+    clearInterval(timerInterval);
+    stopTimer(); // 倒计时结束时调用 stopTimer() 函数进行页面跳转
+  }
+}
 
     function addDisplay(addTime)
     {
@@ -296,7 +324,8 @@ $link->close();
             fetch(`update_coins.php?elapsed=${elapsed}`)
                 .then(response => response.text())
                 .then(data => {
-                    document.getElementById('coinsDisplay').textContent = `Coins: ${data}`;
+                    const coinsDisplay = document.getElementById('coinsDisplay');
+                    coinsDisplay.querySelector('.coin-emoji').textContent = `${data}`;
                 })
                 .catch(error => console.error('Error updating coins:', error));
         }

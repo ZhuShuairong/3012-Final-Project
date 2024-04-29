@@ -14,16 +14,23 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
-            color: #333;
+            background-image: url('pause_background.jpg');
+            background-size: cover;
+            color: transparent;
         }
 
         .container {
-            background: white;
+            background: rgba(255, 255, 255, 0.8);
             padding: 40px 60px;
             border-radius: 10px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             text-align: center;
+            animation: fadeIn 2s 1;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
 
         h1 {
@@ -75,5 +82,3 @@
     </script>
 </body>
 </html>
-
-
