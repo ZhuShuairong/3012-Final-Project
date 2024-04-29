@@ -227,7 +227,8 @@ session_start();
                         <label for="background">Background:</label>
                     </td>
                     <td>
-                        <select id="background" name="background">
+                    <select id="background" name="background">
+                        <option value="default">default</option>
                         <?php
                         $options = array(
                             1 => "Snow mountain",
@@ -237,15 +238,17 @@ session_start();
                             5 => "Lake",
                             6 => "Grassland"
                         );
-                        foreach ($options as $value => $option) {
-                            if (in_array($value, $_SESSION['clickedBgIds'])) {
-                                echo "<option value='$value'>$option</option>";
+
+                        if (!empty($_SESSION['clickedBgIds'])) {
+                            foreach ($options as $value => $option) {
+                                if (in_array($value, $_SESSION['clickedBgIds'])) {
+                                    echo "<option value='$value'>$option</option>";
+                                }
                             }
                         }
                         ?>
-                        </select>
-            
-                    </td>
+                    </select>
+                </td>
                 </tr>
                 <tr id="durationContainer" style="display:none;">
                     <td>
