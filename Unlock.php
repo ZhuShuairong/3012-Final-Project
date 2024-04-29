@@ -283,7 +283,6 @@ foreach ($photoGroups as $groupIndex => $group) {
     
         // 将 $bg_id 添加到 $_SESSION['clickedBgIds'] 的末尾
         $_SESSION['clickedBgIds'][] = $bg_id; 
-
         $_SESSION['clickedBgIds'] = array_unique($_SESSION['clickedBgIds']);
     
     } else {
@@ -294,10 +293,17 @@ foreach ($photoGroups as $groupIndex => $group) {
     }
 }
 
-// 显示清理会话的按钮
-echo "<form method='post'>";
-echo "<button type='submit' name='clearSession'>清理会话</button>";
+if (isset($_POST['clear_session'])) {
+    // 清除所有会话数据
+    session_unset();
+    session_destroy();
+}
+
+// 显示清除会话按钮
+echo "<form method='POST'>";
+echo "<input type='submit' name='clear_session' value='Clear Session'>";
 echo "</form>";
+
 ?>
 <a href="index.php" class="back-button">Back to Main Page</a>
 </body>

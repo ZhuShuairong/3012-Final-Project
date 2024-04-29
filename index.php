@@ -230,6 +230,24 @@ session_start();
                     <select id="background" name="background">
                         <option value="default">default</option>
                         <?php
+                        session_start();
+
+                        $userid = "";
+                        $password = "";
+                        $error_message = "";
+                        $userid = $_SESSION['userid'];
+                        $link = mysqli_connect("localhost", "root", "A12345678", "mydata") or die("Cannot open MySQL database connection!<br/>");
+                        $res = mysqli_query($link, "SELECT * FROM myshop");
+                        $sql = "SELECT background FROM `login-info` WHERE userid = '$userid'";
+
+                        $result = mysqli_query($link, $sql);
+                        
+                        if ($result) {
+                            $row = mysqli_fetch_assoc($result);
+                            $backgroundString = $row['background'];
+                            $background = explode(";", $backgroundString);
+                        }
+                        
                         $options = array(
                             1 => "Snow mountain",
                             2 => "Mountain",
@@ -239,10 +257,10 @@ session_start();
                             6 => "Grassland"
                         );
 
-                        if (!empty($_SESSION['clickedBgIds'])) {
-                            foreach ($options as $value => $option) {
-                                if (in_array($value, $_SESSION['clickedBgIds'])) {
-                                    echo "<option value='$value'>$option</option>";
+                        if (!empty($background)) {
+                            foreach ($background as $value) {
+                                if (isset($options[$value])) {
+                                    echo "<option value='$value'>" . $options[$value] . "</option>";
                                 }
                             }
                         }
