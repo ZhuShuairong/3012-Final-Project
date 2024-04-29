@@ -229,12 +229,12 @@ session_start();
                     <select id="timerType" name="timerType">
                         <?php
                         $options = array(
-                            1 => "Up Timer",
-                            2 => "Down Timer",
-                            3 => "Up Timer",
-                            4 => "Down Timer",
-                            5 => "Up Timer",
-                            6 => "Down Timer"
+                            1 => "Snow mountain",
+                            2 => "Mountain",
+                            3 => "Forest",
+                            4 => "Camp",
+                            5 => "Lake",
+                            6 => "Grassland"
                         ); // 选项数组
                         foreach ($options as $value => $option) {
                             if (in_array($value, $_SESSION['clickedBgIds'])) {
