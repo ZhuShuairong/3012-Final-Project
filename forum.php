@@ -74,74 +74,169 @@ $result = mysqli_query($link, $query);
 // Check if there are any messages
 if (mysqli_num_rows($result) > 0) {
     // Output each message
-    echo '<div class="message-container">';
+    $messages = '';
     while ($row = mysqli_fetch_assoc($result)) {
         $message = $row['message'];
         $username = $row['username'];
         $datetime = $row['datetime'];
 
         // Display the message
-        echo '<p style="font-size: 20px;">' . $message . '</p>';
-        echo '<p style="font-size: 12px;">' . $username . "  |  " . $datetime . '</p>';
-        echo '<hr>';
+        $messages .= '<p style="font-size: 20px;">' . $message . '</p>';
+        $messages .= '<p style="font-size: 12px;">' . $username . "  |  " . $datetime . '</p>';
+        $messages .= '<hr>';
     }
-    echo '</div>';
 } else {
-    echo 'No messages found.';
+    $messages = 'No messages found.';
 }
 
 // Close the database connection
 mysqli_close($link);
 ?>
 
-<!-- HTML form for user input -->
-<form method="POST" style="display: flex; position: fixed; bottom: 0; left: 0; width: 100%; margin-bottom: 60px;">
-    <textarea name="message" rows="4" style="flex: 1; padding: 0 20px; margin-left: 10px; margin-right: 10px;" placeholder="Share a message:"></textarea>
-    <input type="submit" value="Send" style="flex: 0.05;"> <!-- Modified the flex value to make it smaller -->
-</form>
-<div class="dropdown">
-    <button class="dropbtn">Menu</button>
-    <div class="dropdown-content">
-        <a href="index.php">Back</a>    
-        <a href="shop.php">Shop</a>
-        <a href="records.php">Record</a>
-        <a href="choose.php">choose</a>
-        <a href="personal.php">Personal</a>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: linear-gradient(to bottom, #d39dbb, #ded6f2);
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid black;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            width: 25cm;
+            height: 15cm;
+            position: relative;
+            box-sizing: border-box; 
+            border: 10px solid black;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .message-container {
+            position: relative;
+            width: 800px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+        .message-container p {
+            font-size: 25px;
+            margin-top: 0;
+        }
+        .message-container p:last-child {
+            font-size: 17px;
+        }
+        .form-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            width: 940px; 
+            margin-top: auto; 
+        }
+        .form-container textarea {
+            position: relative; 
+            bottom: -80px; 
+            width: 860px; 
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px; 
+            margin-left: 24px;
+            border: none;
+            background-color: #f9f9f9;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        .form-container input[type="submit"] {
+            position: absolute;
+            bottom: -75px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px; 
+            height: 32px; 
+            border: none; 
+            border-radius: 60px; 
+            background-image: linear-gradient(to right, #d39dbb, #ded6f2);
+            color: white;
+            font-size: 17px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .dropdown {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            border: none; 
+            outline: none; 
+        }
+        .dropbtn {
+        font-size: 20px;
+        padding: 10px 20px; 
+        border-radius: 20px;
+        background-color: purple;
+        color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            right: 0;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+        .dropdown-content a:hover {
+            background-color:purple;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown:hover .dropbtn {
+            background-color: purple;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="message-container">
+            <?php echo $messages; ?>
+        </div>
+
+        <!-- HTML form for user input -->
+        <div class="form-container">
+            <form method="POST">
+                <textarea name="message" rows="4" placeholder="Share a message:"></textarea>
+                <input type="submit" value="+ Send">
+            </form>
+        </div>
+        
+        <div class="dropdown">
+            <button class="dropbtn">Menu</button>
+            <div class="dropdown-content">
+                <a href="index.php">Back</a>    
+                <a href="shop.php">Shop</a>
+                <a href="records.php">Record</a>
+                <a href="choose.php">choose</a>
+                <a href="personal.php">Personal</a>
+            </div>
+        </div>
     </div>
-</div>
-<style>
-    .message-container {
-        max-height: calc(100vh - 180px);
-        overflow-y: auto;
-    }
-    .dropdown {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-    }
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-        right: 0;
-    }
-    .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-        text-align: left;
-    }
-    .dropdown-content a:hover {
-        background-color: #f1f1f1;
-    }
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-    .dropdown:hover .dropbtn {
-        background-color: #3e8e41;
-    }
-</style>
+</body>
+</html>
