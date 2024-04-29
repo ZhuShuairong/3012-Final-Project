@@ -3,32 +3,42 @@ if (!session_id()) session_start();
 require_once 'db_connect.php'; // 确保你有一个用于数据库连接的文件
 
 // 获取当前选择的产品 ID
-$selected_product_id = isset($_SESSION['selected_product_id']) ? $_SESSION['selected_product_id'] : null;
+$selected_product_id = isset($_GET['background']) ? $_GET['background'] : null;
 
 // 查询数据库以获取当前选择产品对应的背景图片 URL
 if ($selected_product_id) {
-    $sql = "SELECT mime FROM myshop WHERE product_id = ?";
+    $sql = "SELECT mime, name FROM `background` WHERE bg_id = ?";
     $stmt = $link->prepare($sql);
     $stmt->bind_param("i", $selected_product_id);
     $stmt->execute();
-    $stmt->bind_result($mime);
+    $stmt->bind_result($mime, $name);
     $stmt->fetch();
     $stmt->close();
 
-    // 根据 MIME 类型确定图片的后缀
-    $extension = 'jpg'; // 默认后缀为 jpg
-    if ($mime === 'image/png') {
-        $extension = 'png';
-    } elseif ($mime === 'image/gif') {
-        $extension = 'gif';
-    }
+    if ($name) {
+        echo "成功！已读取到选定的产品 ID";
 
-    // 根据产品 ID 和后缀生成背景图片 URL
-    $backgroundUrl = "backgrounds/$selected_product_id.$extension";
+        // 根据 MIME 类型确定图片的后缀
+        $extension = 'jpg'; // 默认后缀为 jpg
+        if ($mime === 'image/png') {
+            $extension = 'png';
+        } elseif ($mime === 'image/gif') {
+            $extension = 'gif';
+        }
+
+        // 根据产品 ID 和后缀生成背景图片 URL
+        $backgroundUrl = "3012 final picture/$mime";
+    } else {
+        echo "未读取到选定的产品 ID的产品名称";
+    }
 } else {
+    echo "未读取到选定的产品 ID";
+
     // 如果没有选择产品或选择的产品 ID 无效，使用默认背景图片URL
     $backgroundUrl = 'default_background.jpg'; // 设置一个默认的背景图片URL
 }
+
+
 
 // 获取前端传来的参数
 $name = isset($_GET['name']) ? $_GET['name'] : 'default_name';
@@ -68,7 +78,7 @@ $link->close();
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>计时中</title>
+    <title></title>
     <style>
         body {
             background-color: #f8f8f8;
@@ -89,6 +99,32 @@ $link->close();
             position: absolute; /* Make the timer display float above the progress bar */
             z-index: 1; /* Ensure it is above the SVG */
         }
+
+        .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .custom-button {
+        background-color: #1AAD19;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    #coinsDisplay {
+    font-size: 2em;
+  }
+
+    .custom-button:hover {
+        background-color: #129F12;
+    }
 
         .progress-bar {
             width: 200px;
@@ -127,10 +163,12 @@ $link->close();
     </svg>
     <div id="timeLeftDisplay" style="position: absolute; font-size: 32px; color: #333;">00:00:00</div>
 </div>
-<h1>计时中: <span id="focusNameDisplay"></span></h1>
-<button onclick="pauseResumeTimer()">暂停/继续</button>
-<button onclick="stopTimer()">停止计时</button>
-<p id="coinsDisplay">Coins earned this session: <?php echo htmlspecialchars($coins); ?></p>
+<h1>Focus: <span id="focusNameDisplay"></span></h1>
+<div class="button-container">
+    <button class="custom-button" onclick="pauseResumeTimer()">Pause/Continue</button>
+    <button class="custom-button" onclick="stopTimer()">Stop</button>
+</div>
+<p id="coinsDisplay">&#x1F4B0;: <span class="coin-emoji"></span><span class="coins-amount"></span></p>
 
 <script>
     let startTime;
@@ -214,16 +252,16 @@ $link->close();
     }
 
     // Update the timer every second
-    function updateTimer() {
-        const now = Date.now();
-        elapsed = now - startTime;
-        updateDisplay(elapsed);
+function updateTimer() {
+  const now = Date.now();
+  elapsed = now - startTime;
+  updateDisplay(elapsed);
 
-        if (timerType === 'down' && elapsed >= duration) {
-            clearInterval(timerInterval);
-            alert('倒计时结束');
-        }
-    }
+  if (timerType === 'down' && elapsed >= duration) {
+    clearInterval(timerInterval);
+    stopTimer(); // 倒计时结束时调用 stopTimer() 函数进行页面跳转
+  }
+}
 
     function addDisplay(addTime)
     {
@@ -296,13 +334,14 @@ $link->close();
             fetch(`update_coins.php?elapsed=${elapsed}`)
                 .then(response => response.text())
                 .then(data => {
-                    document.getElementById('coinsDisplay').textContent = `Coins: ${data}`;
+                    const coinsDisplay = document.getElementById('coinsDisplay');
+                    coinsDisplay.querySelector('.coin-emoji').textContent = `${data}`;
                 })
                 .catch(error => console.error('Error updating coins:', error));
         }
 
         // 每180秒（三分钟）调用一次updateCoins
-        setInterval(updateCoins, 180 * 1000);
+        setInterval(updateCoins, 1 * 1000);
         updateCoins(); // 页面加载时也调用一次
     });
 </script>
