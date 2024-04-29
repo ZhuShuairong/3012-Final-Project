@@ -16,8 +16,6 @@ if ($selected_product_id) {
     $stmt->close();
 
     if ($name) {
-        echo "成功！已读取到选定的产品 ID";
-
         // 根据 MIME 类型确定图片的后缀
         $extension = 'jpg'; // 默认后缀为 jpg
         if ($mime === 'image/png') {
@@ -29,14 +27,10 @@ if ($selected_product_id) {
         // 根据产品 ID 和后缀生成背景图片 URL
         $backgroundUrl = "3012 final picture/$mime";
     } else {
-        echo "未读取到选定的产品 ID的产品名称";
+        // 如果没有选择产品或选择的产品 ID 无效，使用默认背景图片URL
+        $backgroundUrl = 'default_background.jpg'; // 设置一个默认的背景图片URL
     }
-} else {
-    echo "未读取到选定的产品 ID";
-
-    // 如果没有选择产品或选择的产品 ID 无效，使用默认背景图片URL
-    $backgroundUrl = 'default_background.jpg'; // 设置一个默认的背景图片URL
-}
+} 
 
 
 
