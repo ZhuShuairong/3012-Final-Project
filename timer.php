@@ -83,6 +83,9 @@ $link->close();
             font-family: Arial, sans-serif;
             flex-direction: column; /* Align items vertically */
             background-image: url('<?php echo $backgroundUrl; ?>');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
         }
 
         #timerDisplay {
