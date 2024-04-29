@@ -1,4 +1,4 @@
-<?php
+<?PHP
 session_start();
 ?>
 <!DOCTYPE html>
@@ -177,11 +177,12 @@ session_start();
                 e.preventDefault();
                 const focusName = $('#focusName').val();
                 const timerType = $('#timerType').val();
+                const background = $('#background').val();
                 const duration = $('#duration').val() || 0;
-                window.location.href = `timer.php?name=${encodeURIComponent(focusName)}&type=${timerType}&duration=${duration}`;
+                window.location.href = `timer.php?name=${encodeURIComponent(focusName)}&type=${timerType}&background=${background}&duration=${duration}`;
             });
         });
-    </script>
+</script>
 </head>
 <body>
     <div class="dropdown">
@@ -222,11 +223,11 @@ session_start();
                     </td>
                 </tr>
                 <tr>
-                <td>
-                    <label for="Background">Background:</label>
-                </td>
-                <td>
-                    <select id="timerType" name="timerType">
+                    <td>
+                        <label for="background">Background:</label>
+                    </td>
+                    <td>
+                        <select id="background" name="background">
                         <?php
                         $options = array(
                             1 => "Snow mountain",
@@ -235,15 +236,16 @@ session_start();
                             4 => "Camp",
                             5 => "Lake",
                             6 => "Grassland"
-                        ); // 选项数组
+                        );
                         foreach ($options as $value => $option) {
                             if (in_array($value, $_SESSION['clickedBgIds'])) {
                                 echo "<option value='$value'>$option</option>";
                             }
                         }
                         ?>
-                    </select>
-                </td>
+                        </select>
+            
+                    </td>
                 </tr>
                 <tr id="durationContainer" style="display:none;">
                     <td>
