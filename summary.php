@@ -68,6 +68,21 @@
 <body>
 <?php
 session_start();
+$userid = "";
+$password = "";
+$error_message = "";
+$link = mysqli_connect("localhost", "root", "A12345678", "mydata")
+    or die("Cannot open MySQL database connection!<br/>");
+
+if (isset($_SESSION["userid"])) {
+    $userid = $_SESSION["userid"];
+} else {
+    //检测
+    print "no";
+}
+
+$sql = "SELECT minutes FROM `login-info` WHERE userid = '$userid'";
+$result = mysqli_query($link, $sql);
 
 if (isset($_GET['name']) && isset($_GET['date']) && isset($_GET['elapsed']) && isset($_GET['coins'])) {
     $name = urldecode($_GET['name']);
@@ -79,6 +94,7 @@ if (isset($_GET['name']) && isset($_GET['date']) && isset($_GET['elapsed']) && i
     $minutes = floor(($elapsed % 3600000) / 60000);
     $seconds = floor(($elapsed % 60000) / 1000);
 
+
     echo "<table>";
     echo "<tr><td colspan='2'><h1>Focus Summary</h1></td></tr>";
     echo "<tr><td>Date:</td><td><span class='highlight'>$date</span></td></tr>";
@@ -86,7 +102,25 @@ if (isset($_GET['name']) && isset($_GET['date']) && isset($_GET['elapsed']) && i
     echo "<tr><td>Task:</td><td><span class='highlight'>$name</span></td></tr>";
     echo "<tr><td>Coins Obtained:</td><td><span class='highlight'>$coins coins</span></td></tr>";
     echo "<tr><td colspan='2' style='text-align: center; color: transparent;'>\n</td></tr>";
-echo "<tr><td colspan='2' style='text-align: center; color: transparent;'><a class='button' href='Index.php'>Back to Index</a></td></tr>";
+    echo "<tr><td colspan='2' style='text-align: center; color: transparent;'><a class='button' href='Index.php'>Back to Index</a></td></tr>";
+
+    if ($result) {
+        $record = intval($_GET['elapsed']);
+        $row = mysqli_fetch_assoc($result);
+        $minutes = intval($row['minutes']);
+        // 将 $minutes 添加到 $record 中
+        $minutes += $record;
+
+        // 更新数据库中的记录
+        $updateSql = "UPDATE `login-info` SET minutes = '$minutes' WHERE userid = '$userid'";
+        $updateResult = mysqli_query($link, $updateSql);
+
+        if (!$updateResult) {
+           print "error";
+        }
+    } else {
+        print "quiry error";
+    }
 } else {
     echo "<p>Focus record format is incorrect or incomplete.</p>";
 }
