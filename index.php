@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -187,7 +190,7 @@
             <a href="shop.php">Shop</a>
             <a href="records.php">Record</a>
             <a href="block.php">Forum</a>
-            <a href="choose.php">choose</a>
+            <a href="Unlock.php">choose</a>
             <a href="personal.php">Personal</a>
         </div>
     </div>
@@ -217,6 +220,30 @@
                             <option value="down">Down Timer</option>
                         </select>
                     </td>
+                </tr>
+                <tr>
+                <td>
+                    <label for="Background">Background:</label>
+                </td>
+                <td>
+                    <select id="timerType" name="timerType">
+                        <?php
+                        $options = array(
+                            1 => "Up Timer",
+                            2 => "Down Timer",
+                            3 => "Up Timer",
+                            4 => "Down Timer",
+                            5 => "Up Timer",
+                            6 => "Down Timer"
+                        ); // 选项数组
+                        foreach ($options as $value => $option) {
+                            if (in_array($value, $_SESSION['clickedBgIds'])) {
+                                echo "<option value='$value'>$option</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+                </td>
                 </tr>
                 <tr id="durationContainer" style="display:none;">
                     <td>
