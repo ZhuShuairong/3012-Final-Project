@@ -193,44 +193,46 @@ $link->close();
 
     // Initialize the timer based on session storage data or start anew
     function initTimer() {
-        startTime = sessionStorage.getItem('startTime');
-        elapsed = sessionStorage.getItem('elapsed');
-        isPaused = sessionStorage.getItem('isPaused') === 'true';
-        const toPause = sessionStorage.getItem('toPause')
-        if (timerType === "down"){
-            sessionStorage.removeItem('startTime')
-            sessionStorage.removeItem('elapsed')
-            sessionStorage.removeItem('isPaused')
-            if (toPause === "3"){
-                startTime = Date.now();
-                elapsed = 0;
-                isPaused = false;
-            }else if (toPause === "2"){
-                startTime = parseInt(startTime);
-                elapsed = parseInt(elapsed);
+    startTime = sessionStorage.getItem('startTime');
+    elapsed = sessionStorage.getItem('elapsed');
+    isPaused = sessionStorage.getItem('isPaused') === 'true';
+    const toPause = sessionStorage.getItem('toPause');
+
+    if (timerType === "down") {
+        sessionStorage.removeItem('startTime');
+        sessionStorage.removeItem('elapsed');
+        sessionStorage.removeItem('isPaused');
+
+        if (toPause === "3") {
+            startTime = Date.now();
+            elapsed = 0;
+            isPaused = false;
+        } else if (toPause === "2") {
+            startTime = Date.now() - elapsed;
+            elapsed = parseInt(elapsed);
+        }
+
+        // Update the display with the current elapsed time
+        updateDisplay(elapsed);
+
+        // Start or pause the timer based on session storage data
+        if (!isPaused) {
+            timerInterval = setInterval(updateTimer1, 1000);
+        }
+    } else {
+        if (!isPaused) {
+            const params = sessionStorage.getItem('query');
+            if (params) {
+                let query = JSON.parse(params);
+                addTime = query.addTime ?? 0;
+                sessionStorage.removeItem("query");
             }
 
-            // Update the display with the current elapsed time
-            updateDisplay(elapsed);
-
-            // Start or pause the timer based on session storage data
-            if (!isPaused) {
-                timerInterval = setInterval(updateTimer, 1000);
-            }
-        }else{
-            if (!isPaused) {
-                const params = sessionStorage.getItem('query');
-                if (params){
-                    let query = JSON.parse(params)
-                    addTime = query.addTime??0
-                    sessionStorage.removeItem("query")
-                }
-                addTimer()
-                timerInterval = setInterval(addTimer, 1000);
-            }
-
+            addTimer();
+            timerInterval = setInterval(addTimer, 1000);
         }
     }
+}
 
     // Update the timer display with the elapsed time
     function updateDisplay(elapsed) {
@@ -250,34 +252,42 @@ $link->close();
     }
 
     // Update the timer every second
-function updateTimer() {
-  const now = Date.now();
-  elapsed = now - startTime;
-  updateDisplay(elapsed);
+        function updateTimer1() {
+        const now = Date.now();
+        elapsed = now - startTime;
+        updateDisplay(elapsed);
 
-  if (timerType === 'down' && elapsed >= duration) {
-    clearInterval(timerInterval);
-    stopTimer(); // 倒计时结束时调用 stopTimer() 函数进行页面跳转
-  }
-}
+        if (timerType === 'down' && elapsed >= duration) {
+            elapsed = now - startTime;
+            clearInterval(timerInterval);
+            stopTimer(); // 倒计时结束时调用 stopTimer() 函数进行页面跳转
+        }
+        }
 
-    function addDisplay(addTime)
-    {
-        const totalSeconds = addTime;
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-        const formattedTime = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        isPaused = false;
-        document.getElementById('timeLeftDisplay').textContent = formattedTime;
-    }
 
-    function addTimer()
-    {
-        addTime = parseInt(addTime)+1
-        // 00:00:00
-        addDisplay(addTime);
-    }
+        function updateTimer2() {
+        elapsed = startTime;
+        updateDisplay(elapsed);
+
+        }
+
+        function addDisplay(addTime)
+        {
+            const totalSeconds = addTime;
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            const formattedTime = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            isPaused = false;
+            document.getElementById('timeLeftDisplay').textContent = formattedTime;
+        }
+
+        function addTimer()
+        {
+            addTime = parseInt(addTime)+1
+            // 00:00:00
+            addDisplay(addTime);
+        }
 
     // Pause or resume the timer
     function pauseResumeTimer() {
@@ -294,7 +304,7 @@ function updateTimer() {
                 sessionStorage.removeItem('query')
             }
             sessionStorage.setItem('query', JSON.stringify({
-                name,type,duration,background,addTime
+                name,type,duration,addTime,background
             }));
             if (timerType==="down"){
                 clearInterval(timerInterval);
@@ -307,9 +317,12 @@ function updateTimer() {
            if (timerType==="down"){
                startTime = Date.now() - elapsed;
                sessionStorage.removeItem('isPaused');
-               timerInterval = setInterval(updateTimer, 1000);
+               timerInterval = setInterval(updateTimer1, 1000);
+           }else{
+               startTime = Date.now();
+               sessionStorage.removeItem('isPaused');
+               timerInterval = setInterval(updateTimer2, 1000);
            }
-
         }
     }
 
@@ -340,7 +353,7 @@ function updateTimer() {
         }
 
         // 每180秒（三分钟）调用一次updateCoins
-        setInterval(updateCoins, 1 * 1000);
+        setInterval(updateCoins, 180 * 1000);
         updateCoins(); // 页面加载时也调用一次
     });
 </script>
