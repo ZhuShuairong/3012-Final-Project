@@ -166,7 +166,7 @@ session_start();
 
             setTimeout(function() {
                 popup.style.display = 'none';
-            }, 5000); // 10 seconds
+            }, 5000); // 5 seconds
         });
 </script>
 

@@ -8,6 +8,34 @@ $link = mysqli_connect("localhost", "root", "A12345678", "mydata")
 
 $res = mysqli_query($link, "SELECT * FROM myshop");
 
+$sql1 = "SELECT inventory FROM `login-info` WHERE userid = '$userid'";
+
+
+$result = mysqli_query($link, $sql1);
+
+if ($result) {
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $inventoryString = $row['inventory'];
+
+        if (!empty($inventoryString)) {
+            $inventoryArray = explode(";", trim($inventoryString));
+
+            if (count($inventoryArray) > 0 && isset($inventoryArray[0])) {
+                // 执行您希望在库存数组不为空时执行的操作
+            } else {
+                echo "Inventory array is empty.";
+            }
+        } else {
+            echo "Inventory string is empty.";
+        }
+    } else {
+        
+    }
+} else {
+    echo "Query failed.";
+}
+
 // Obtain form data
 if (isset($_SESSION["userid"])) {
     $userid = $_SESSION["userid"];
@@ -49,7 +77,7 @@ if ($userid != "" && $password != "") {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
 
-    // 根据$product_id获取商品价格
+    // 根据 $product_id 获取商品价格
     $sql = "SELECT price FROM myshop WHERE product_id = '$product_id'";
     $result = mysqli_query($link, $sql);
 
@@ -57,50 +85,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
         $row = mysqli_fetch_assoc($result);
         $price = $row['price'];
 
-        // 获取当前用户的coins数量
-        $userid = $_SESSION["userid"]; // 使用会话变量userid
-        $sql = "SELECT coins FROM `login-info` WHERE userid = '$userid'";
+        // 获取当前用户的 coins 数量
+        $sql = "SELECT coins, inventory FROM `login-info` WHERE userid = '$userid'";
         $result = mysqli_query($link, $sql);
 
         if ($result && mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_assoc($result);
             $currentCoins = $row['coins'];
+            $inventoryString = $row['inventory'];
+            $inventoryArray = explode(';', $inventoryString);
 
-            // 检查用户的coins是否足够购买商品
+            // 检查用户的 coins 是否足够购买商品
             if ($currentCoins >= $price) {
                 // 检查购物车中是否已经包含该商品
-                $foundInCart = false;
-                if (isset($_SESSION['cart'])) {
-                    foreach ($_SESSION['cart'] as $item) {
-                        if ($item['product_id'] === $product_id) {
-                            $foundInCart = true;
-                            break;
-                        }
-                    }
-                }
+                $foundInCart = in_array($product_id, $inventoryArray);
 
                 if ($foundInCart) {
-                    echo "";
+                    echo "<script>alert('The item already exists in the shopping cart. Cannot purchase again.');</script>";
                 } else {
-                    // 更新用户的coins数量
+                    // 更新用户的 coins 数量
                     $newCoins = $currentCoins - $price;
                     $sql = "UPDATE `login-info` SET coins = '$newCoins' WHERE userid = '$userid'";
                     $updateResult = mysqli_query($link, $sql);
 
                     if ($updateResult) {
-                        echo "Update successfully.";
+                        // 更新成功
+
+                        // 将选定的商品添加到购物车
+                        $inventoryArray[] = $product_id;
+                        $updatedInventoryString = implode(';', $inventoryArray);
+                        $sql = "UPDATE `login-info` SET inventory = '$updatedInventoryString' WHERE userid = '$userid'";
+                        $updateInventoryResult = mysqli_query($link, $sql);
+
+                        if ($updateInventoryResult) {
+                            echo "<script>alert('Item added to the shopping cart.');</script>";
+                        } else {
+                            echo "<script>alert('Failed to update the shopping cart.');</script>";
+                        }
                     } else {
-                        echo "Failed to update coins.";
+                        // 更新失败
+                        echo "<script>alert('Failed to update coins.');</script>";
                     }
                 }
             } else {
-                echo "Insufficient coins. Unable to make the purchase.";
+                echo "<script>alert('Insufficient coins. Unable to make the purchase.');</script>";
             }
         } else {
-            echo "No records found for the user.";
+            echo "<script>alert('No records found for the user.');</script>";
         }
     } else {
-        echo "Invalid product ID.";
+        echo "<script>alert('Invalid product ID.');</script>";
     }
 }
 
@@ -116,23 +150,7 @@ while ($row = mysqli_fetch_assoc($res)) {
     $myshop[] = $row;
 }
 
-// Handle adding items to the cart
-if (isset($_POST['add_to_cart'])) {
-    $product_id = $_POST['product_id'];
 
-    // Check if cart session variable exists, if not, create it
-    if (!isset($_SESSION['cart'])) {
-        $_SESSION['cart'] = array();
-        // Add the selected item to the cart
-        $item = array(
-            'product_id' => $product_id
-        );
-        $_SESSION['cart'][] = $item;
-
-        echo "Item added to cart successfully.";
-    }
-    echo "";
-}
 ?>
 
 <!DOCTYPE html>
@@ -189,7 +207,7 @@ if (isset($_POST['add_to_cart'])) {
             padding: 10px 20px;
             font-size: 20px;
             background-color: #D3BBB8;
-            color: #000;
+            color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -244,13 +262,6 @@ if (isset($_POST['add_to_cart'])) {
             border-radius: 4px;
             cursor: pointer;
             margin-top: 10px;
-        }
-
-        .disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background-color: #BEBEBE;
-            color: #BEBEBE;
         }
 
         .back-button,
@@ -314,10 +325,8 @@ if (isset($_POST['add_to_cart'])) {
         <div id="balance">&#x1F4B0<span id="balance-value"></span></div>
 
             <script>
-                function showPurchaseAlert(productid) {
-                    alert("Item added to inventory");
-                }
-
+    
+                
                 // Creating XMLHttpRequest object
                 var xhr = new XMLHttpRequest();
 
@@ -362,20 +371,7 @@ if (isset($_POST['add_to_cart'])) {
                         <p>Price: $<?php echo $row['price']; ?></p>
                         <form action="" method="POST">
                             <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
-                            <?php
-                            $isInCart = false;
-                            foreach ($_SESSION['cart'] as $item) {
-                                if ($item['product_id'] === $row['product_id']) {
-                                    $isInCart = true;
-                                    break;
-                                }
-                            }
-                            if ($isInCart) {
-                                echo '<button type="button" class="disabled">Sold Out!</button>';
-                            } else {
-                                echo '<button type="submit" name="add_to_cart" onclick="showPurchaseAlert(' . $row['product_id'] . ')">Purchase</button>';
-                            }
-                            ?>
+                            <button type="submit" name="add_to_cart">Purchase</button>
                         </form>
                     </div>
                     <?php $itemCount++; ?>
@@ -387,74 +383,6 @@ if (isset($_POST['add_to_cart'])) {
     </div>
     <a href="index.php" class="back-button">Back to Main Page</a>
 
-    <?php
-    // Handle adding items to the cart
-    if (isset($_POST['add_to_cart'])) {
-        $product_id = $_POST['product_id'];
-        $cart_item = array(
-            'product_id' => $product_id,
-        );
-
-        // Check if cart session variable exists, if not, create it
-        if (!isset($_SESSION['cart'])) {
-            $_SESSION['cart'] = array();
-        }
-
-        // Check if the item is already in the cart, if yes, updatethe quantity. Otherwise, add it to the cart.
-
-        $found = false;
-
-        // Check if the item is already in the cart
-        foreach ($_SESSION['cart'] as $item) {
-            if ($item['product_id'] === $product_id) {
-                $found = true;
-                // Update the quantity or perform any other necessary action
-                break;
-            }
-        }
-
-        // If the item is not already in the cart, add it
-        if (!$found) {
-            $_SESSION['cart'][] = $cart_item;
-        }
-
-        // Create an array to store unique product IDs
-        $unique_product_ids = array();
-
-        // Extract unique product IDs from cart items
-        foreach ($_SESSION['cart'] as $item) {
-            $product_id = $item['product_id'];
-            // Only add unique product IDs to the array
-            if (!in_array($product_id, $unique_product_ids)) {
-                $unique_product_ids[] = $product_id;
-            }
-        }
-
-        // Convert the array of unique product IDs to a single string
-        $inventory_string = implode(";", $unique_product_ids);
-
-        // Store the inventory string in a session variable or database field
-        $_SESSION['inventory'] = $inventory_string;
-
-        // Assuming you have established a database connection
-        // and have assigned the connection object to $link
-
-        // Get the userid from the session or from wherever it is stored
-        $userid = $_SESSION['userid'];
-
-        // Prepare the SQL statement to update the inventory in the database
-        $sql = "UPDATE `login-info` SET inventory = '$inventory_string' WHERE userid = '$userid'";
-
-        // Execute the SQL statement
-        $result = mysqli_query($link, $sql);
-
-        // Check if the update was successful
-        if (!$result) {
-            echo "Failed to update inventory: " . mysqli_error($link);
-        }
-
-        exit();
-    }
-    ?>
+   
 </body>
 </html>

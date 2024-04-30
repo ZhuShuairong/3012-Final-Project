@@ -109,21 +109,21 @@ if (isset($_GET['name']) && isset($_GET['date']) && isset($_GET['elapsed']) && i
         $row = mysqli_fetch_assoc($result);
         $minutes = intval($row['minutes']);
         // 将 $minutes 添加到 $record 中
-        $minutes += $record;
-
+        $minutes += floor($record / (1000 * 60)); // 将毫秒转换为分钟并向下取整
+    
         // 更新数据库中的记录
         $updateSql = "UPDATE `login-info` SET minutes = '$minutes' WHERE userid = '$userid'";
         $updateResult = mysqli_query($link, $updateSql);
-
+    
         if (!$updateResult) {
-           print "error";
+            print "error";
         }
     } else {
         print "quiry error";
     }
-} else {
-    echo "<p>Focus record format is incorrect or incomplete.</p>";
-}
+    } else {
+        echo "<p>Focus record format is incorrect or incomplete.</p>";
+    }
 ?>
 
 </body>
