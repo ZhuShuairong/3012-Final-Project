@@ -189,9 +189,9 @@ session_start();
         <button class="dropbtn">Menu</button>
         <div class="dropdown-content">
             <a href="shop.php">Shop</a>
-            <a href="records.php">Record</a>
-            <a href="block.php">Forum</a>
-            <a href="Unlock.php">choose</a>
+            <a href="ranking.php">Ranking</a>
+            <a href="forum.php">Forum</a>
+            <a href="Unlock.php">Unlock</a>
             <a href="personal.php">Personal</a>
         </div>
     </div>

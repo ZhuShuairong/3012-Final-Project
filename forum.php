@@ -232,8 +232,8 @@ mysqli_close($link);
             <div class="dropdown-content">
                 <a href="index.php">Back</a>    
                 <a href="shop.php">Shop</a>
-                <a href="records.php">Record</a>
-                <a href="choose.php">choose</a>
+                <a href="ranking.php">Ranking</a>
+                <a href="unlock.php">Unlock</a>
                 <a href="personal.php">Personal</a>
             </div>
         </div>
