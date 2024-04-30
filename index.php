@@ -1,5 +1,59 @@
-<?PHP
+<?php
 session_start();
+
+$userid = "";
+$password = "";
+$error_message = "";
+
+$userid = $_SESSION['userid'];
+
+$link = mysqli_connect("localhost", "root", "A12345678", "mydata") or die("Cannot open MySQL database connection!<br/>");
+
+$res = mysqli_query($link, "SELECT * FROM myshop");
+
+$sql = "SELECT background FROM `login-info` WHERE userid = '$userid'";
+$sql1 = "SELECT inventory FROM `login-info` WHERE userid = '$userid'";
+
+$photoGroups = [
+    [9, 10, 6, 4],
+    [8, 18, 14, 5],
+    [12, 17, 11, 16],
+    [7, 14, 13, 6],
+    [1, 3, 12, 18],
+    [2, 6, 8, 15]
+];
+
+$result = mysqli_query($link, $sql1);
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $inventoryString = $row['inventory'];
+    $inventoryArray = explode(";", $inventoryString);
+
+    
+} else {
+    echo "Query failed.";
+}
+
+$background = "";
+
+foreach ($photoGroups as $index => $group) {
+    $allExist = true;
+    foreach ($group as $photoId) {
+        if (!in_array($photoId, $inventoryArray)) {
+            $allExist = false;
+            break;
+        }
+    }
+    if ($allExist) {
+        $background .= ($index + 1) . ";";
+    }
+}
+
+$background = rtrim($background, ";");
+
+$updateSql = "UPDATE `login-info` SET background = '$background' WHERE userid = '$userid'";
+$updateResult = mysqli_query($link, $updateSql);
+
 ?>
 <!DOCTYPE html>
 <html lang="zh">
@@ -192,7 +246,8 @@ session_start();
             <a href="ranking.php">Ranking</a>
             <a href="forum.php">Forum</a>
             <a href="Unlock.php">Unlock</a>
-            <a href="personal.php">Personal</a>
+            <a href="personal.php">Password</a>
+            <a href="logout.php">Log out</a>
         </div>
     </div>
     <div class="container">
