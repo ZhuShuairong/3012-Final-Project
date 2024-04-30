@@ -36,6 +36,15 @@
         border-radius: 4px;
         margin-top: 20px;
     }
+    .update-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: green;
+        color: #fff;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        }
 </style>
 </head>
 <body>
@@ -92,9 +101,7 @@
             </table>
         </div>
         <div class="centered">
-            <a href="logout.php"><button type="button">Logout</button></a>
-            &nbsp
-            <input type="submit" name="Update" value="Update" />
+            <button type="submit" name="Update" class="update-button">Update</button>
         </div>
         <a href="index.php" class="back-button">Back to Main Page</a>
     </form>
