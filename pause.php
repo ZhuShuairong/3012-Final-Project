@@ -14,7 +14,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+            background-image: linear-gradient(to bottom, #d39dbb, #ded6f2);
             color: #333;
         }
 
@@ -37,7 +37,7 @@
         }
 
         button {
-            background-color: #4CAF50;
+            background-color: #d39dbb;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -49,7 +49,7 @@
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #ded6f2;
         }
     </style>
 </head>
