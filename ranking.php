@@ -147,11 +147,11 @@ if (!$result) {
 
             setTimeout(function() {
                 popup.style.display = 'none';
-            }, 10000); // 10 seconds
+            }, 5000); // 5 seconds
         });
 </script>
 <div class="centered-content">
-    <h1 style="margin-top: 0;">Minutes Ranking</h1>
+    <h1 style="margin-top: 0;">Ranking</h1>
     <div class="container scrollable-table">
         <table class="rounded-table">
             <tr>
