@@ -5,7 +5,7 @@
 <title>personal.php</title>
 <style>
     body {
-        background-image: url("background.png");
+        background-image: url("background_personal.png");
         background-size: cover;
         display: flex;
         justify-content: center;
@@ -14,15 +14,23 @@
     }
 
     .container {
-        background-color: rgba(255, 255, 255, 0.8);
+        background-color: transparent;
         padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 10px;
+        max-width: 1000px;
+        box-shadow: 0 0 10px white;
+        font-size: 20px;
     }
 
     .centered {
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: center;
         margin-bottom: 10px;
+        color: black;
     }
     .back-button {
         position: fixed;
@@ -30,25 +38,59 @@
         right: 20px;
         padding: 10px 20px;
         font-size: 16px;
-        background-color: #ccc;
-        color: #000;
+        background-color: #fff;
+        color: black;
         text-decoration: none;
         border-radius: 4px;
         margin-top: 20px;
+        font-weight: bold;
     }
     .update-button {
         padding: 10px 20px;
         font-size: 16px;
-        background-color: green;
-        color: #fff;
-        border-radius: 4px;
+        background-color: #fff;;
+        color: black;
+        border-radius: 20px;
         border: none;
         cursor: pointer;
-        }
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        font-weight: bold;
+    }
+    .title {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: white;
+    }
+    .right-aligned-label {
+        display: flex;
+        justify-content: flex-end;
+        width: 100px;
+        margin-right: 10px;
+    }
+    .input-field {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+    .input-field input[type="text"],
+    .input-field input[type="password"] {
+        background-color: transparent; 
+        border: 1px solid white; 
+        color: white; 
+    }
+    label {
+        margin-right: 10px; 
+        text-align: right;
+    }
 </style>
 </head>
 <body>
 <div class="container">
+    <div class="title">Change Password</div>
     <?php
     // check if Update button was clicked
     if (isset($_POST["Update"])) {
@@ -85,20 +127,16 @@
     ?>
     <form action="personal.php" method="post">
         <div class="centered">
-            <table border="1">
-                <tr>
-                    <td>userid:</td>
-                    <td><input type="text" autocomplete="off" name="userid" size="12" /></td>
-                </tr>
-                <tr>
-                    <td>Old Password:</td>
-                    <td><input type="password" autocomplete="off" name="Confirm" size="12" /></td>
-                </tr>
-                <tr>
-                    <td>New Password:</td>
-                    <td><input type="password" autocomplete="off" name="Password" size="12" /></td>
-                </tr>
-            </table>
+            <label for="userid" style="text-align: left;">User ID:</label>
+            <input type="text" autocomplete="off" name="userid" id="userid" size="12" /><br>
+        </div>
+        <div class="centered">
+            <label for="confirm" style="text-align: left;">Old Password:</label>
+            <input type="password" autocomplete="off" name="Confirm" id="confirm" size="12" /><br>
+        </div>
+        <div class="centered">
+            <label for="password" style="text-align: left;">New Password:</label>
+            <input type="password" autocomplete="off" name="Password" id="password" size="12" /><br>
         </div>
         <div class="centered">
             <button type="submit" name="Update" class="update-button">Update</button>
