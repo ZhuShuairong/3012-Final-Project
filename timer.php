@@ -176,6 +176,7 @@ $link->close();
 
     const focusName = decodeURIComponent(new URLSearchParams(window.location.search).get('name')) || '默认任务';
     const timerType = new URLSearchParams(window.location.search).get('type');
+    const background = new URLSearchParams(window.location.search).get('background');
     const duration = parseInt(new URLSearchParams(window.location.search).get('duration'), 10) * 60000;
 
     document.getElementById('focusNameDisplay').textContent = focusName;
@@ -288,11 +289,12 @@ function updateTimer() {
             const name = params.get('name'); // 获取name参数的值
             const type = params.get('type'); // 获取type参数的值
             const duration = params.get('duration'); // 获取duration参数的值
+            const background = params.get('background');
             if (sessionStorage.getItem("query")){
                 sessionStorage.removeItem('query')
             }
             sessionStorage.setItem('query', JSON.stringify({
-                name,type,duration,addTime
+                name,type,duration,background,addTime
             }));
             if (timerType==="down"){
                 clearInterval(timerInterval);
