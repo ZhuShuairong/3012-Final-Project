@@ -33,12 +33,12 @@ if (!$result) {
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20;
+            margin: 0;
             padding: 0;
-            background-color: #e8d7d7;
+            background: linear-gradient(to bottom left, #ffd8df, #cee1fd);
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
             height: 100vh;
         }
 
@@ -48,8 +48,13 @@ if (!$result) {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             padding-top: 50px;
+        }
+        h1 {
+            font-size: 36px; /* 将 "Ranking" 字体大小变大 */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* 添加底部阴影 */
+            color: #fff;
         }
 
         .scrollable-table {
@@ -66,6 +71,8 @@ if (!$result) {
             border-spacing: 0;
             background-color: #D3BBB8;
             margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .container {
@@ -80,11 +87,11 @@ if (!$result) {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
-            background-color: #fff;
+            background: #fff;
         }
 
         th {
-            background-color: #f2f2f2;
+            background: #eef7fc;
         }
 
         tr:first-child th:first-child {
