@@ -6,51 +6,77 @@
     <?php session_start(); ?>
     <style>
         body {
-            background-image: url("background.png");
+            background-image: url("register_background.jpg");
             background-repeat: no-repeat;
             background-size: cover;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         
-        .login-container {
-            background-color: rgba(255, 255, 255, 0.7);
-            width: 400px;
-            margin: 0 auto;
-            margin-top: 200px;
+        .register-container {
+            background-color: rgba(255, 255, 255, 0.5);
+            width: 600px;
             padding: 20px;
             text-align: center;
-        }
-        
-        .login-container input[type="text"],
-        .login-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .login-container .submit-container {
-            text-align: center;
-        }
-        
-        .login-container input[type="submit"] {
-            background-color: orange;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: background-color 0.3s, box-shadow 0.3s;
+            border-radius: 20px;
             box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
         }
         
-        .login-container input[type="submit"]:hover {
-            background-color: darkorange;
+        table {
+            width: 80%; /* Adjusted table width for better proximity of labels to inputs */
+            margin: auto; /* Ensure table is centered within container */
+        }
+
+        td {
+            text-align: left;
+            padding: 8px;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: 100%; /* Adjust input width to fill table cell */
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        .submit-container {
+    text-align: center; /* Ensures button alignment is centralized in container */
+    width: 100%; /* Full width to spread across the container */
+    padding-top: 20px; /* Space above buttons */
+}
+
+.button-group {
+    display: flex;
+    justify-content: center; /* Centering buttons horizontally */
+    gap: 25px; /* 25px gap between buttons */
+}
+
+        
+        input[type="submit"],
+        button.login-button {
+            background-color: #1aad19;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        input[type="submit"]:hover,
+        button.login-button:hover {
+            background-color: #138e15;
             box-shadow: none;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="register-container">
         <?php
             $username = "";
             $email = "";
@@ -75,7 +101,7 @@
                                 $link = @mysqli_connect(
                                     'localhost',
                                     'root',
-                                    'A12345678',
+                                    '',
                                     'mydata'
                                 );
 
@@ -183,29 +209,31 @@
             }
         ?>
 
-        <form action="register.php" method="POST">
+<form action="register.php" method="POST">
             <h2>Register</h2>
             <table>
                 <tr>
-                    <td><font size="2">Username:</font></td>
+                    <td>Username:</td>
                     <td><input type="text" name="Username" maxlength="12" /></td>
                 </tr>
                 <tr>
-                    <td><font size="2">Email:</font></td>
+                    <td>Email:</td>
                     <td><input type="text" name="Email" maxlength="64" /></td>
                 </tr>
                 <tr>
-                    <td><font size="2">Password:</font></td>
+                    <td>Password:</td>
                     <td><input type="password" name="Password" maxlength="12" /></td>
                 </tr>
                 <tr>
-                    <td><font size="2">Confirm Password:</font></td>
+                    <td>Confirm Password:</td>
                     <td><input type="password" name="Confirm" maxlength="12" /></td>
                 </tr>
                 <tr>
-                    <td class="submit-container">
-                      <input type="submit" value="Register" />
-                      <a href="login.php">Login</a>
+                    <td colspan="2" class="submit-container">
+                        <div class="button-group">
+                            <input type="submit" value="Register" />
+                            <button type="button" class="login-button" onclick="window.location.href='login.php'">Login</button>
+                        </div>
                     </td>
                 </tr>
             </table>
