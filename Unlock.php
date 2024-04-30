@@ -30,7 +30,7 @@ session_start();
     .title-bar h1 {
     text-align: center;
     margin-top: 20px;
-    font-size: 24px;
+    font-size: 30px;
     }   
 
     .title-bar form {
@@ -90,14 +90,14 @@ session_start();
     }
 
     .photo-item button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 2500px;
-    height: 100px;
-    border: none;
-    background: none;
-    cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 2500px;
+        height: 100px;
+        border: none;
+        background: none;
+        cursor: pointer;
     }
 
     .photo-item.background {
@@ -128,16 +128,50 @@ session_start();
         border-radius: 4px;
         margin-top: 20px;
     }
+    /* Styles for the popup window */
+    #popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(125, 33, 55, 0.8);;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        font-size: 18px;
+        z-index: 9999; /* Higher z-index value */
+        opacity: 1;
+        transition: opacity 1ms ease; /* Transition effect for opacity property */
+    }
+    </style>
 </style>
 
 </head>
 <body>
 
-<div class="title-bar">
-<h1>Choose your background:</h1>
+<div id="popup">
+    已经购买的物品和解锁的背景为彩色！
 </div>
 
+<div class="title-bar">
+<h1>Unlock your background:</h1>
+</div>
+
+
+<script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var popup = document.getElementById('popup');
+            popup.style.display = 'block';
+
+            setTimeout(function() {
+                popup.style.display = 'none';
+            }, 5000); // 10 seconds
+        });
+</script>
+
 <?php
+
 
 $userid = "";
 $password = "";
@@ -210,12 +244,12 @@ if ($userid != "" && $password != "") {
 }
 
 $photoGroups = [
-    [9, 10, 14, 4],
+    [9, 10, 6, 4],
     [8, 18, 14, 5],
-    [12, 17, 14, 16],
-    [7, 11, 13, 6],
-    [3, 6, 8, 15],
-    [3, 6, 8, 15]
+    [12, 17, 11, 16],
+    [7, 14, 13, 6],
+    [1, 3, 12, 18],
+    [2, 6, 8, 15]
 ];
 
 echo "<div class='photo-container'>";
@@ -292,17 +326,6 @@ foreach ($photoGroups as $groupIndex => $group) {
         echo "</div>";
     }
 }
-
-if (isset($_POST['clear_session'])) {
-    // 清除所有会话数据
-    session_unset();
-    session_destroy();
-}
-
-// 显示清除会话按钮
-echo "<form method='POST'>";
-echo "<input type='submit' name='clear_session' value='Clear Session'>";
-echo "</form>";
 
 ?>
 <a href="index.php" class="back-button">Back to Main Page</a>

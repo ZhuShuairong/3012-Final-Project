@@ -15,12 +15,12 @@ $sql = "SELECT background FROM `login-info` WHERE userid = '$userid'";
 $sql1 = "SELECT inventory FROM `login-info` WHERE userid = '$userid'";
 
 $photoGroups = [
-    [9, 10, 14, 4],
+    [9, 10, 6, 4],
     [8, 18, 14, 5],
-    [12, 17, 14, 16],
-    [7, 11, 13, 6],
-    [3, 6, 8, 15],
-    [3, 6, 8, 15]
+    [12, 17, 11, 16],
+    [7, 14, 13, 6],
+    [1, 3, 12, 18],
+    [2, 6, 8, 15]
 ];
 
 $result = mysqli_query($link, $sql1);
