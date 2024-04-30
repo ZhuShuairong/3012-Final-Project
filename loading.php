@@ -6,7 +6,7 @@
     <title>Loading...</title>
     <style>
         body {
-            background-image: url("background.png");
+            background-image: url("loading.jpg");
             background-repeat: no-repeat;
             background-size: cover;
         }
