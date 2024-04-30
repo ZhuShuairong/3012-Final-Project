@@ -46,6 +46,22 @@
             background-color: darkorange;
             box-shadow: none;
         }
+        .register-button {
+            background-color: orange;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .register-button:hover {
+            background-color: darkorange;
+            box-shadow: none;
+        }
     </style>
 </head>
 <body>
@@ -114,10 +130,10 @@
                     <td><input type="password" name="Password" maxlength="12" /></td>
                 </tr>
                 <tr>
-                    <td class="submit-container">
-                      <input type="submit" name="submit" value="Log in" />
-                      <a href="register.php">Register</a>
-                    </td>
+                <td class="submit-container">
+                    <input type="submit" name="submit" value="Log in" />
+                    <button type="button" onclick="location.href='register.php'" class="register-button">Register</button>
+                </td>
                 </tr>
             </table>
         </form>
