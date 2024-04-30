@@ -24,6 +24,18 @@
         align-items: center;
         margin-bottom: 10px;
     }
+    .back-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #ccc;
+        color: #000;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-top: 20px;
+    }
 </style>
 </head>
 <body>
@@ -80,12 +92,11 @@
             </table>
         </div>
         <div class="centered">
-            <a href="index.php"><button type="button">Back</button></a>
-            &nbsp
             <a href="logout.php"><button type="button">Logout</button></a>
             &nbsp
             <input type="submit" name="Update" value="Update" />
         </div>
+        <a href="index.php" class="back-button">Back to Main Page</a>
     </form>
 </div>
 </body>
