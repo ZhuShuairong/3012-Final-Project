@@ -284,9 +284,14 @@ $link->close();
 
         function addTimer()
         {
-            addTime = parseInt(addTime)+1
-            // 00:00:00
+            addTime = parseInt(addTime) + 1;
+            elapsed = addTime * 1000; // 将秒数转换为毫秒数
+
+            // 更新显示
             addDisplay(addTime);
+
+            // 存储elapsed到sessionStorage
+            sessionStorage.setItem('elapsed', elapsed.toString());
         }
 
     // Pause or resume the timer
