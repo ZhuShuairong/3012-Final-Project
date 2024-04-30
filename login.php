@@ -60,40 +60,45 @@
         if (isset($_POST["Password"]))
             $password = $_POST["Password"];
 
-        if ($username != "" && $password != "") {
-            $link = @mysqli_connect(
-                'localhost',
-                'root',
-                'A12345678',
-                'mydata'
-            );
+        if (isset($_POST["submit"])) {
+            if ($username == "") {
+                echo "<script>alert('Please enter a username!');</script>";
+                $_SESSION["login_session"] = false;
+            } elseif ($password == "") {
+                echo "<script>alert('Please enter a password!');</script>";
+                $_SESSION["login_session"] = false;
+            } else {
+                $link = @mysqli_connect(
+                    'localhost',
+                    'root',
+                    'A12345678',
+                    'mydata'
+                );
 
-            mysqli_query($link, 'SET NAMES utf8');
+                mysqli_query($link, 'SET NAMES utf8');
 
-            $sql = "SELECT * FROM `login-info` WHERE password='";
-            $sql .= $password . "' AND username='" . $username . "'";
-
-            $result = mysqli_query($link, $sql);
-            $total_records = mysqli_num_rows($result);
-
-            if ($total_records > 0) {
-
-                $sql = "SELECT userid FROM `login-info` WHERE password='";
+                $sql = "SELECT * FROM `login-info` WHERE password='";
                 $sql .= $password . "' AND username='" . $username . "'";
 
                 $result = mysqli_query($link, $sql);
-                $userid = mysqli_fetch_row($result)[0];
+                $total_records = mysqli_num_rows($result);
 
-                $_SESSION["userid"] = $userid;
-                $_SESSION["login_session"] = true;
-                header("Location: index.php");
-            } else {
-                echo "<font color='red'>";
-                echo "Username or password not found!<br/>";
-                echo "</font>";
-                $_SESSION["login_session"] = false;
+                if ($total_records > 0) {
+                    $sql = "SELECT userid FROM `login-info` WHERE password='";
+                    $sql .= $password . "' AND username='" . $username . "'";
+
+                    $result = mysqli_query($link, $sql);
+                    $userid = mysqli_fetch_row($result)[0];
+
+                    $_SESSION["userid"] = $userid;
+                    $_SESSION["login_session"] = true;
+                    header("Location: index.php");
+                } else {
+                    echo "<script>alert('Username or password not found!');</script>";
+                    $_SESSION["login_session"] = false;
+                }
+                mysqli_close($link);
             }
-            mysqli_close($link);
         }
         ?>
 
@@ -110,7 +115,7 @@
                 </tr>
                 <tr>
                     <td class="submit-container">
-                      <input type="submit" value="Log in" />
+                      <input type="submit" name="submit" value="Log in" />
                       <a href="register.php">Register</a>
                     </td>
                 </tr>
