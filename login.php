@@ -100,7 +100,7 @@
             $link = @mysqli_connect(
                 'localhost',
                 'root',
-                'A12345678',
+                '',
                 'mydata'
             );
 
@@ -132,7 +132,7 @@
     ?>
 
     <h2>Login</h2>
-    <formaction="login.php" method="post">
+    <form action="login.php" method="post">
         <table>
             <tr>
                 <td><label for="username">Username:</label></td>
