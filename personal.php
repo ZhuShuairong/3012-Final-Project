@@ -16,7 +16,6 @@
     .container {
         background-color: rgba(255, 255, 255, 0.8);
         padding: 20px;
-        border-radius: 10px;
     }
 
     .centered {
@@ -81,9 +80,11 @@
             </table>
         </div>
         <div class="centered">
-            <input type="submit" name="Update" value="Update" />
-            <input type="submit" name="Back" value="Back" />
+            <a href="index.php"><button type="button">Back</button></a>
+            &nbsp
             <a href="logout.php"><button type="button">Logout</button></a>
+            &nbsp
+            <input type="submit" name="Update" value="Update" />
         </div>
     </form>
 </div>
