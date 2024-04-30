@@ -87,7 +87,7 @@
                 $link = @mysqli_connect(
                     'localhost',
                     'root',
-                    'A12345678',
+                    '',
                     'mydata'
                 );
 
