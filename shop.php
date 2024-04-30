@@ -189,7 +189,7 @@ if (isset($_POST['add_to_cart'])) {
             padding: 10px 20px;
             font-size: 20px;
             background-color: #D3BBB8;
-            color: #fff;
+            color: #000;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -244,6 +244,13 @@ if (isset($_POST['add_to_cart'])) {
             border-radius: 4px;
             cursor: pointer;
             margin-top: 10px;
+        }
+
+        .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #BEBEBE;
+            color: #BEBEBE;
         }
 
         .back-button,
@@ -307,10 +314,10 @@ if (isset($_POST['add_to_cart'])) {
         <div id="balance">&#x1F4B0<span id="balance-value"></span></div>
 
             <script>
-                function showPurchaseAlert() {
-                    alert("Item added to cart.");
+                function showPurchaseAlert(productid) {
+                    alert("Item added to inventory");
                 }
-                
+
                 // Creating XMLHttpRequest object
                 var xhr = new XMLHttpRequest();
 
@@ -355,7 +362,20 @@ if (isset($_POST['add_to_cart'])) {
                         <p>Price: $<?php echo $row['price']; ?></p>
                         <form action="" method="POST">
                             <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
-                            <button type="submit" name="add_to_cart" onclick="showPurchaseAlert()">Purchase</button>
+                            <?php
+                            $isInCart = false;
+                            foreach ($_SESSION['cart'] as $item) {
+                                if ($item['product_id'] === $row['product_id']) {
+                                    $isInCart = true;
+                                    break;
+                                }
+                            }
+                            if ($isInCart) {
+                                echo '<button type="button" class="disabled">Sold Out!</button>';
+                            } else {
+                                echo '<button type="submit" name="add_to_cart" onclick="showPurchaseAlert(' . $row['product_id'] . ')">Purchase</button>';
+                            }
+                            ?>
                         </form>
                     </div>
                     <?php $itemCount++; ?>
