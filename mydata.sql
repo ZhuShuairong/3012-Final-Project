@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2024-04-30 20:41:46
+-- 生成日期： 2024-05-01 12:30:02
 -- 服务器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -78,8 +78,8 @@ CREATE TABLE `login-info` (
 --
 
 INSERT INTO `login-info` (`userid`, `username`, `email`, `password`, `coins`, `inventory`, `minutes`, `last_update`, `background`) VALUES
-(1, 'admin', 'admin@tony.com', '3012', 15, '', '0', '2024-04-26 15:20:19', ''),
-(5, 'zxz', '1223', '', 49, '1;2;3;4;6;10;9;13;14;7;11;17;12;16;15;8', '15', '2024-04-30 17:10:19', '1;3;4;6'),
+(1, 'admin', 'admin@tony.com', '3012', 18, '', '1', '2024-05-01 09:34:41', ''),
+(5, 'zxz', '1223', '200211', 45, ';1;2;4;6;10;9;3;15;16;8;11;7;5;13;18;14', '21', '2024-05-01 10:25:40', '1;2;4;6'),
 (6, 'moon', '250', '111111', 21, '', '0', '2024-04-29 20:04:47', ''),
 (7, '222', 'BC10481@umac.mo', '1111', 20, '', '0', '2024-04-30 12:09:03', '');
 
@@ -150,15 +150,6 @@ CREATE TABLE `public-forum` (
   `message` varchar(100) NOT NULL,
   `datetime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- 转存表中的数据 `public-forum`
---
-
-INSERT INTO `public-forum` (`msg_id`, `username`, `message`, `datetime`) VALUES
-(15, 'admin', 'Hi', '2024-04-28 09:10:04'),
-(16, 'zxz', 'aaa', '2024-04-30 12:49:32'),
-(17, 'zxz', 'sdsd', '2024-04-30 12:49:34');
 
 -- --------------------------------------------------------
 
@@ -231,7 +222,7 @@ ALTER TABLE `myshop`
 -- 使用表AUTO_INCREMENT `public-forum`
 --
 ALTER TABLE `public-forum`
-  MODIFY `msg_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `msg_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- 使用表AUTO_INCREMENT `type`
