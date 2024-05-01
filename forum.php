@@ -1,6 +1,9 @@
 <?php
 // Start the session
 session_start();
+if (!isset($_SESSION['userid'])) {
+    header("Location: login.php");
+}
 
 $link = @mysqli_connect('localhost', 'root', 'A12345678', 'mydata');
 
@@ -174,45 +177,18 @@ mysqli_close($link);
             font-size: 17px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .dropdown {
+        .back-button {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
-            border: none; 
-            outline: none; 
-        }
-        .dropbtn {
-        font-size: 20px;
-        padding: 10px 20px; 
-        border-radius: 20px;
-        background-color: purple;
-        color: white;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            right: 0;
-        }
-        .dropdown-content a {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #fff;
             color: black;
-            padding: 12px 16px;
             text-decoration: none;
-            display: block;
-            text-align: left;
-        }
-        .dropdown-content a:hover {
-            background-color:purple;
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        .dropdown:hover .dropbtn {
-            background-color: purple;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -226,20 +202,10 @@ mysqli_close($link);
         <div class="form-container">
             <form method="POST">
                 <textarea name="message" rows="4" placeholder="Share a message:"></textarea>
-                <input type="submit" value="+ Send">
+                <input type="submit" value="Send">
             </form>
         </div>
-        
-        <div class="dropdown">
-            <button class="dropbtn">Menu</button>
-            <div class="dropdown-content">
-                <a href="index.php">Back</a>    
-                <a href="shop.php">Shop</a>
-                <a href="ranking.php">Ranking</a>
-                <a href="unlock.php">Unlock</a>
-                <a href="personal.php">Personal</a>
-            </div>
-        </div>
     </div>
+    <a href="index.php" class="back-button">Back to Main Page</a>
 </body>
 </html>
