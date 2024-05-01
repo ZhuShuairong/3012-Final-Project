@@ -95,7 +95,7 @@ $updateResult = mysqli_query($link, $updateSql);
             width: 100%;
             max-width: 600px;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.7); /* 半透明白色背景 */
+            background-color: rgba(255, 255, 255, 0.7); 
             border: 1px solid #ddd;
             border-radius: 8px;
         }
@@ -121,8 +121,8 @@ $updateResult = mysqli_query($link, $updateSql);
             width: calc(100% - 48px);
             padding: 16px;
             border: none;
-            background-color: transparent; /* 使输入框透明 */
-            font-size: 1.2em; /* 增加输入框字体大小 */
+            background-color: transparent; 
+            font-size: 1.2em; 
         }
         .form-group button {
             width: 100%;
@@ -144,16 +144,16 @@ $updateResult = mysqli_query($link, $updateSql);
         }
 
         .dropdown .dropbtn {
-            font-size: 1.2em; /* 调整按钮的字体大小来增加大小 */
-            padding: 16px 20px; /* 调整按钮的内边距来增加大小 */
-            background-color: #505d6f; /* 修改背景颜色为蓝色 */
+            font-size: 1.2em; 
+            padding: 16px 20px; 
+            background-color: #505d6f; 
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
         .dropdown .dropbtn:hover {
-            background-color: #76a3ad; /* 修改鼠标悬停时的背景颜色 */
+            background-color: #76a3ad; 
         }
 
         .dropdown-content {
@@ -200,15 +200,15 @@ $updateResult = mysqli_query($link, $updateSql);
             background-color: #f4f4f4;
             border: 1px solid #ddd;
             border-radius: 5px;
-            text-align: center; /* 居中说明文字 */
+            text-align: center;
         }
         #startTimingButton {
             background-color: #505d6f;
             color: #ffffff;
-            border: none; /* 去掉边框 */
-            border-radius: 5px; /* 设置圆角为 20px，可以根据需要调整 */
-            padding: 10px 20px; /* 调整按钮的内边距来增加大小 */
-            font-size: 1.0em; /* 调整按钮的字体大小来增加大小 */
+            border: none; 
+            border-radius: 5px; 
+            padding: 10px 20px; 
+            font-size: 1.0em; 
         }
         
         #startTimingButton:hover {
@@ -216,26 +216,34 @@ $updateResult = mysqli_query($link, $updateSql);
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            sessionStorage.setItem('toPause','3')
-            $('#timerType').change(function() {
-                if ($(this).val() === 'down') {
-                    $('#durationContainer').show();
-                } else {
-                    $('#durationContainer').hide();
-                }
-            });
-
-            $('#focusForm').submit(function(e) {
-                e.preventDefault();
-                const focusName = $('#focusName').val();
-                const timerType = $('#timerType').val();
-                const background = $('#background').val();
-                const duration = $('#duration').val() || 0;
-                window.location.href = `timer.php?name=${encodeURIComponent(focusName)}&type=${timerType}&background=${background}&duration=${duration}`;
-            });
+<script>
+    $(document).ready(function() {
+        sessionStorage.setItem('toPause','3')
+        $('#timerType').change(function() {
+            if ($(this).val() === 'down') {
+                $('#durationContainer').show();
+            } else {
+                $('#durationContainer').hide();
+            }
         });
+
+        $('#focusForm').submit(function(e) {
+            e.preventDefault();
+
+            const duration = $('#duration').val();
+            if ($('#timerType').val() === 'down' && duration === '') {
+                alert("Duration cannot be empty.");
+                return;
+            }
+
+            const focusName = $('#focusName').val();
+            const timerType = $('#timerType').val();
+            const background = $('#background').val();
+            const encodedFocusName = encodeURIComponent(focusName);
+            const url = `timer.php?name=${encodedFocusName}&type=${timerType}&background=${background}&duration=${duration || 0}`;
+            window.location.href = url;
+        });
+    });
 </script>
 </head>
 <body>
@@ -307,7 +315,7 @@ $updateResult = mysqli_query($link, $updateSql);
                             1 => "Snow mountain",
                             2 => "Mountain",
                             3 => "Forest",
-                            4 => "Camp",
+                            4 => "Firework",
                             5 => "Lake",
                             6 => "Grassland"
                         );
@@ -340,7 +348,7 @@ $updateResult = mysqli_query($link, $updateSql);
                     <td colspan="2" class="reward-info">
                         <p>Earn 20 virtual coins for every full hour timed, whether it's an up timer or a down timer.<br>
                             <br>Note: No coins are awarded if a down timer is stopped before completing an hour.
-                            &#x1F4B0; <!-- 添加钱币的 Emoji -->
+                            &#x1F4B0; 
                         </p>
                     </td>
                 </tr>
