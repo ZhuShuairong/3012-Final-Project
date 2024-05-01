@@ -62,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo 'Error inserting message into the database.';
         }
         mysqli_stmt_close($stmt);
+        header("Location: forum.php");
     }
 }
 
