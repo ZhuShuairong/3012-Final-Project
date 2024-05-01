@@ -125,6 +125,8 @@ mysqli_close($link);
         .message-container {
             position: relative;
             width: 800px;
+            max-height: 400px;
+            overflow-y: scroll;
             padding: 20px;
             background-color: #f9f9f9;
             margin-bottom: 20px;
